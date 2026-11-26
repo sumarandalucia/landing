@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sumar Andalucía</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Fuentes oficiales Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #EDECEE;
+      font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Contenedor central compacto, medido y minimalista */
+    .brand-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 250px;
+      padding: 12px;
+    }
+
+    .logo-svg {
+      width: 100%;
+      height: auto;
+      max-height: 50vh;
+      overflow: visible;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.04));
+    }
+
+    /* Indicador de provincia y puntos ocultos a petición del usuario */
+    .province-indicator {
+      display: none;
+    }
+
+    .province-name-wrapper {
+      height: 18px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 160px;
+    }
+
+    .province-name {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #1C1C1C;
+      display: inline-block;
+      text-align: center;
+      will-change: transform, opacity;
+    }
+
+    .province-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .prov-dot {
+      width: 4.5px;
+      height: 4.5px;
+      border-radius: 3px;
+      background-color: #D1D5DB;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .prov-dot:hover {
+      background-color: #007A33;
+      transform: scale(1.25);
+    }
+
+    .prov-dot.active {
+      background-color: #007A33;
+      width: 14px;
+    }
+
+    .badge-soon {
+      margin-top: 22px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: #9CA3AF;
+    }
+
+    /* Vuelo fluido de la bandada de flamencos pequeños en línea recta por detrás del edificio */
+    .flock-flight-group {
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+
+    .f-mini-wing {
+      transform-origin: 0px 0px;
+      animation: flapMini 0.55s ease-in-out infinite;
+    }
+    @keyframes flapMini {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.45); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-stage">
+    <!-- Viewbox con holgura para monumentos arriba (hasta -58) y andalucía abajo (hasta 78) -->
+    <svg class="logo-svg" viewBox="-10 -60 174 142" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Máscara de suelo: cualquier elemento que descienda por debajo de y=0 queda recortado a ras de la barra -->
+        <clipPath id="groundClip"><rect x="-100" y="-70" width="354" height="70" /></clipPath>
+      </defs>
+
+      <!-- Grupo de monumentos sobre la barra negra (y <= 0) -->
+      <g clip-path="url(#groundClip)">
+        <g id="sceneCordoba" class="province-scene">
+        <g class="tier-1">
+          <rect class="draw-stroke" x="15" y="-2.5" width="6" height="2.5" rx="0.5" fill="#1C1C1C"/>
+          <rect class="draw-stroke" x="16.2" y="-15" width="3.6" height="12.5" rx="0.6" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+          <polygon class="draw-stroke" points="14.5,-15 21.5,-15 20.2,-18.5 15.8,-18.5" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8"/>
+          <rect class="draw-stroke" x="15.6" y="-23.5" width="4.8" height="5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+          <rect class="draw-stroke" x="54" y="-2.5" width="6" height="2.5" rx="0.5" fill="#1C1C1C"/>
+          <rect class="draw-stroke" x="55.2" y="-15" width="3.6" height="12.5" rx="0.6" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+          <polygon class="draw-stroke" points="53.5,-15 60.5,-15 59.2,-18.5 54.8,-18.5" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8"/>
+          <rect class="draw-stroke" x="54.6" y="-23.5" width="4.8" height="5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+          <rect class="draw-stroke" x="94" y="-2.5" width="6" height="2.5" rx="0.5" fill="#1C1C1C"/>
+          <rect class="draw-stroke" x="95.2" y="-15" width="3.6" height="12.5" rx="0.6" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+          <polygon class="draw-stroke" points="93.5,-15 100.5,-15 99.2,-18.5 94.8,-18.5" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8"/>
+          <rect class="draw-stroke" x="94.6" y="-23.5" width="4.8" height="5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+          <rect class="draw-stroke" x="133" y="-2.5" width="6" height="2.5" rx="0.5" fill="#1C1C1C"/>
+          <rect class="draw-stroke" x="134.2" y="-15" width="3.6" height="12.5" rx="0.6" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+          <polygon class="draw-stroke" points="132.5,-15 139.5,-15 138.2,-18.5 133.8,-18.5" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8"/>
+          <rect class="draw-stroke" x="133.6" y="-23.5" width="4.8" height="5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+        </g>
+        <g class="tier-2">
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="0" d="M 26.39 -19.02 L 19.63 -17.21 A 18.5 18.5 0 0 1 19.20 -24.68 L 26.12 -23.67 A 11.5 11.5 0 0 0 26.39 -19.02 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="1" d="M 26.12 -23.67 L 19.20 -24.68 A 18.5 18.5 0 0 1 21.75 -31.71 L 27.71 -28.04 A 11.5 11.5 0 0 0 26.12 -23.67 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="2" d="M 27.71 -28.04 L 21.75 -31.71 A 18.5 18.5 0 0 1 26.89 -37.15 L 30.90 -31.42 A 11.5 11.5 0 0 0 27.71 -28.04 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="3" d="M 30.90 -31.42 L 26.89 -37.15 A 18.5 18.5 0 0 1 33.76 -40.12 L 35.17 -33.26 A 11.5 11.5 0 0 0 30.90 -31.42 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="4" d="M 35.17 -33.26 L 33.76 -40.12 A 18.5 18.5 0 0 1 41.24 -40.12 L 39.83 -33.26 A 11.5 11.5 0 0 0 35.17 -33.26 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="5" d="M 39.83 -33.26 L 41.24 -40.12 A 18.5 18.5 0 0 1 48.11 -37.15 L 44.10 -31.42 A 11.5 11.5 0 0 0 39.83 -33.26 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="6" d="M 44.10 -31.42 L 48.11 -37.15 A 18.5 18.5 0 0 1 53.25 -31.71 L 47.29 -28.04 A 11.5 11.5 0 0 0 44.10 -31.42 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="7" d="M 47.29 -28.04 L 53.25 -31.71 A 18.5 18.5 0 0 1 55.80 -24.68 L 48.88 -23.67 A 11.5 11.5 0 0 0 47.29 -28.04 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-0" data-bay="0" data-idx="8" d="M 48.88 -23.67 L 55.80 -24.68 A 18.5 18.5 0 0 1 55.37 -17.21 L 48.61 -19.02 A 11.5 11.5 0 0 0 48.88 -23.67 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="0" d="M 65.89 -19.02 L 59.13 -17.21 A 18.5 18.5 0 0 1 58.70 -24.68 L 65.62 -23.67 A 11.5 11.5 0 0 0 65.89 -19.02 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="1" d="M 65.62 -23.67 L 58.70 -24.68 A 18.5 18.5 0 0 1 61.25 -31.71 L 67.21 -28.04 A 11.5 11.5 0 0 0 65.62 -23.67 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="2" d="M 67.21 -28.04 L 61.25 -31.71 A 18.5 18.5 0 0 1 66.39 -37.15 L 70.40 -31.42 A 11.5 11.5 0 0 0 67.21 -28.04 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="3" d="M 70.40 -31.42 L 66.39 -37.15 A 18.5 18.5 0 0 1 73.26 -40.12 L 74.67 -33.26 A 11.5 11.5 0 0 0 70.40 -31.42 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="4" d="M 74.67 -33.26 L 73.26 -40.12 A 18.5 18.5 0 0 1 80.74 -40.12 L 79.33 -33.26 A 11.5 11.5 0 0 0 74.67 -33.26 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="5" d="M 79.33 -33.26 L 80.74 -40.12 A 18.5 18.5 0 0 1 87.61 -37.15 L 83.60 -31.42 A 11.5 11.5 0 0 0 79.33 -33.26 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="6" d="M 83.60 -31.42 L 87.61 -37.15 A 18.5 18.5 0 0 1 92.75 -31.71 L 86.79 -28.04 A 11.5 11.5 0 0 0 83.60 -31.42 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="7" d="M 86.79 -28.04 L 92.75 -31.71 A 18.5 18.5 0 0 1 95.30 -24.68 L 88.38 -23.67 A 11.5 11.5 0 0 0 86.79 -28.04 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-1" data-bay="1" data-idx="8" d="M 88.38 -23.67 L 95.30 -24.68 A 18.5 18.5 0 0 1 94.87 -17.21 L 88.11 -19.02 A 11.5 11.5 0 0 0 88.38 -23.67 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="0" d="M 105.39 -19.02 L 98.63 -17.21 A 18.5 18.5 0 0 1 98.20 -24.68 L 105.12 -23.67 A 11.5 11.5 0 0 0 105.39 -19.02 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="1" d="M 105.12 -23.67 L 98.20 -24.68 A 18.5 18.5 0 0 1 100.75 -31.71 L 106.71 -28.04 A 11.5 11.5 0 0 0 105.12 -23.67 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="2" d="M 106.71 -28.04 L 100.75 -31.71 A 18.5 18.5 0 0 1 105.89 -37.15 L 109.90 -31.42 A 11.5 11.5 0 0 0 106.71 -28.04 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="3" d="M 109.90 -31.42 L 105.89 -37.15 A 18.5 18.5 0 0 1 112.76 -40.12 L 114.17 -33.26 A 11.5 11.5 0 0 0 109.90 -31.42 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="4" d="M 114.17 -33.26 L 112.76 -40.12 A 18.5 18.5 0 0 1 120.24 -40.12 L 118.83 -33.26 A 11.5 11.5 0 0 0 114.17 -33.26 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="5" d="M 118.83 -33.26 L 120.24 -40.12 A 18.5 18.5 0 0 1 127.11 -37.15 L 123.10 -31.42 A 11.5 11.5 0 0 0 118.83 -33.26 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="6" d="M 123.10 -31.42 L 127.11 -37.15 A 18.5 18.5 0 0 1 132.25 -31.71 L 126.29 -28.04 A 11.5 11.5 0 0 0 123.10 -31.42 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="7" d="M 126.29 -28.04 L 132.25 -31.71 A 18.5 18.5 0 0 1 134.80 -24.68 L 127.88 -23.67 A 11.5 11.5 0 0 0 126.29 -28.04 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+          <path class="draw-stroke v-segment bay-2" data-bay="2" data-idx="8" d="M 127.88 -23.67 L 134.80 -24.68 A 18.5 18.5 0 0 1 134.37 -17.21 L 127.61 -19.02 A 11.5 11.5 0 0 0 127.88 -23.67 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8" stroke-linejoin="round"/>
+        </g>
+      </g>
+    <g id="sceneSevilla" class="province-scene">
+      <!-- CATEDRAL GÓTICA DE SEVILLA AL FONDO (Detrás en z-index, se carga DESPUÉS de la Giralda en GSAP) -->
+      <g id="catedralFondo">
+        <!-- Nave Mayor izquierda (x=24 a 68, altura hasta y=-24) -->
+        <rect class="draw-stroke" x="24" y="-24" width="46" height="15" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+        <!-- Crestería gótica calada sobre la nave izquierda -->
+        <path class="draw-stroke" d="M 24 -24 L 26 -26 L 28 -24 L 30 -26 L 32 -24 L 34 -26 L 36 -24 L 38 -26 L 40 -24 L 42 -26 L 44 -24 L 46 -26 L 48 -24 L 50 -26 L 52 -24 L 54 -26 L 56 -24 L 58 -26 L 60 -24 L 62 -26 L 64 -24 L 66 -26 L 68 -24" stroke="#1C1C1C" stroke-width="0.6" fill="#EDECEE"/>
+        
+        <!-- Ventanales ojivales góticos del claristorio izquierdo -->
+        <path class="draw-stroke" d="M 28 -14 L 28 -20 Q 30.5 -23 33 -20 L 33 -14 Z M 37 -14 L 37 -20 Q 39.5 -23 42 -20 L 42 -14 Z M 46 -14 L 46 -20 Q 48.5 -23 51 -20 L 51 -14 Z M 55 -14 L 55 -20 Q 57.5 -23 60 -20 L 60 -14 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        
+        <!-- Botareles y pináculos góticos izquierdos -->
+        <rect class="draw-stroke" x="23" y="-28" width="2" height="19" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="22.5,-28 24,-33 25.5,-28" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 24 -26 Q 28 -25 30 -21" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+        <rect class="draw-stroke" x="34" y="-29" width="2" height="20" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="33.5,-29 35,-34 36.5,-29" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 35 -27 Q 39 -26 41 -22" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+        <rect class="draw-stroke" x="45" y="-29" width="2" height="20" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="44.5,-29 46,-34 47.5,-29" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 46 -27 Q 50 -26 52 -22" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+        <rect class="draw-stroke" x="56" y="-30" width="2" height="21" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="55.5,-30 57,-35 58.5,-30" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 57 -28 Q 61 -27 63 -23" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+        <!-- Cimborrio / Crucero gótico elevado de la Catedral -->
+        <rect class="draw-stroke" x="64" y="-32" width="16" height="10" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+        <polygon class="draw-stroke" points="63,-32 72,-37 81,-32" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+        <rect class="draw-stroke" x="66" y="-30" width="2" height="4" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+        <rect class="draw-stroke" x="70" y="-30" width="2" height="4" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+        <rect class="draw-stroke" x="74" y="-30" width="2" height="4" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+
+        <!-- Nave Mayor derecha (x=84 a 130, h hasta y=-24) -->
+        <rect class="draw-stroke" x="84" y="-24" width="46" height="15" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+        <!-- Crestería gótica derecha -->
+        <path class="draw-stroke" d="M 84 -24 L 86 -26 L 88 -24 L 90 -26 L 92 -24 L 94 -26 L 96 -24 L 98 -26 L 100 -24 L 102 -26 L 104 -24 L 106 -26 L 108 -24 L 110 -26 L 112 -24 L 114 -26 L 116 -24 L 118 -26 L 120 -24 L 122 -26 L 124 -24 L 126 -26 L 128 -24 L 130 -24" stroke="#1C1C1C" stroke-width="0.6" fill="#EDECEE"/>
+        <!-- Ventanales claristorio derecho -->
+        <path class="draw-stroke" d="M 94 -14 L 94 -20 Q 96.5 -23 99 -20 L 99 -14 Z M 103 -14 L 103 -20 Q 105.5 -23 108 -20 L 108 -14 Z M 112 -14 L 112 -20 Q 114.5 -23 117 -20 L 117 -14 Z M 121 -14 L 121 -20 Q 123.5 -23 126 -20 L 126 -14 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+
+        <!-- Botareles y pináculos derechos -->
+        <rect class="draw-stroke" x="91" y="-30" width="2" height="21" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="90.5,-30 92,-35 93.5,-30" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 92 -28 Q 88 -27 86 -23" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+        <rect class="draw-stroke" x="102" y="-29" width="2" height="20" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="101.5,-29 103,-34 104.5,-29" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 103 -27 Q 99 -26 97 -22" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+        <rect class="draw-stroke" x="113" y="-29" width="2" height="20" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="112.5,-29 114,-34 115.5,-29" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 114 -27 Q 110 -26 108 -22" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+        <rect class="draw-stroke" x="124" y="-28" width="2" height="19" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+        <polygon class="draw-stroke" points="123.5,-28 125,-33 126.5,-28" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+        <path class="draw-stroke" d="M 125 -26 Q 121 -25 119 -21" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+      </g>
+
+    <!-- Nivel 1: Murallas almenadas del recinto de la Catedral y Patio de los Naranjos -->
+    <g class="tier-1">
+      <!-- Muralla izquierda de la Catedral (x=16 a 70, h=9) -->
+      <rect class="draw-stroke" x="16" y="-9" width="54" height="9" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <!-- Almenas almohades escalonadas de la muralla sevillana -->
+      <path class="draw-stroke" d="M 16 -9 L 18 -9 L 18 -12 L 20.5 -12 L 20.5 -9 L 23 -9 L 23 -12 L 25.5 -12 L 25.5 -9 L 28 -9 L 28 -12 L 30.5 -12 L 30.5 -9 L 33 -9 L 33 -12 L 35.5 -12 L 35.5 -9 L 38 -9 L 38 -12 L 40.5 -12 L 40.5 -9 L 43 -9 L 43 -12 L 45.5 -12 L 45.5 -9 L 48 -9 L 48 -12 L 50.5 -12 L 50.5 -9 L 53 -9 L 53 -12 L 55.5 -12 L 55.5 -9 L 58 -9 L 58 -12 L 60.5 -12 L 60.5 -9 L 63 -9 L 63 -12 L 65.5 -12 L 65.5 -9 L 68 -9 L 68 -12 L 70 -9" stroke="#1C1C1C" stroke-width="0.8" fill="#EDECEE"/>
+      <!-- Puerta del Perdón / arquivolta con arco de herradura -->
+      <path class="draw-stroke" d="M 40 0 L 40 -7 A 3 3 0 0 1 46 -7 L 46 0 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Muralla derecha de la Catedral (x=84 a 138, h=9) -->
+      <rect class="draw-stroke" x="84" y="-9" width="54" height="9" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <!-- Almenas almohades escalonadas -->
+      <path class="draw-stroke" d="M 84 -9 L 86 -9 L 86 -12 L 88.5 -12 L 88.5 -9 L 91 -9 L 91 -12 L 93.5 -12 L 93.5 -9 L 96 -9 L 96 -12 L 98.5 -12 L 98.5 -9 L 101 -9 L 101 -12 L 103.5 -12 L 103.5 -9 L 106 -9 L 106 -12 L 108.5 -12 L 108.5 -9 L 111 -9 L 111 -12 L 113.5 -12 L 113.5 -9 L 116 -9 L 116 -12 L 118.5 -12 L 118.5 -9 L 121 -9 L 121 -12 L 123.5 -12 L 123.5 -9 L 126 -9 L 126 -12 L 128.5 -12 L 128.5 -9 L 131 -9 L 131 -12 L 133.5 -12 L 133.5 -9 L 136 -9 L 136 -12 L 138 -9" stroke="#1C1C1C" stroke-width="0.8" fill="#EDECEE"/>
+      <!-- Puerta del recinto catedralicio derecha -->
+      <path class="draw-stroke" d="M 108 0 L 108 -7 A 3 3 0 0 1 114 -7 L 114 0 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+    </g>
+
+    <!-- Nivel 2: Torre Alminar Almohade de la Giralda + GRAN ARBOLEDA DE NARANJOS POR DELANTE DE LA MURALLA Y DE LA GIRALDA -->
+    <g class="tier-2">
+      <!-- Caña o fuste almohade de la Giralda (x=71.2 a 82.8, h=36.5) -->
+      <rect class="draw-stroke" x="71.2" y="-36.5" width="11.6" height="36.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Paño izquierdo de Sebka -->
+      <path class="draw-stroke" d="M 72.8 -16.5 L 74.5 -19 L 72.8 -21.5 L 74.5 -24 L 72.8 -26.5 L 74.5 -29 L 72.8 -31.5 L 74.5 -34 M 74.5 -16.5 L 72.8 -19 L 74.5 -21.5 L 72.8 -24 L 74.5 -26.5 L 72.8 -29 L 74.5 -31.5 L 72.8 -34" stroke="#1C1C1C" stroke-width="0.55" fill="none"/>
+
+      <!-- Calle central con balcones ajimezados y parteluces -->
+      <path class="draw-stroke" d="M 75.3 -20 L 75.3 -22 A 0.6 0.6 0 0 1 76.5 -22 L 76.5 -20 M 77.5 -20 L 77.5 -22 A 0.6 0.6 0 0 1 78.7 -22 L 78.7 -20" stroke="#1C1C1C" stroke-width="0.5" fill="#EDECEE"/>
+      <line class="draw-stroke" x1="75" y1="-20" x2="79" y2="-20" stroke="#E51C55" stroke-width="0.7"/>
+
+      <path class="draw-stroke" d="M 75.3 -25.5 L 75.3 -27.5 A 0.6 0.6 0 0 1 76.5 -27.5 L 76.5 -25.5 M 77.5 -25.5 L 77.5 -27.5 A 0.6 0.6 0 0 1 78.7 -27.5 L 78.7 -25.5" stroke="#1C1C1C" stroke-width="0.5" fill="#EDECEE"/>
+      <line class="draw-stroke" x1="75" y1="-25.5" x2="79" y2="-25.5" stroke="#E51C55" stroke-width="0.7"/>
+
+      <path class="draw-stroke" d="M 75.3 -30 L 75.3 -32 A 0.6 0.6 0 0 1 76.5 -32 L 76.5 -30 M 77.5 -30 L 77.5 -32 A 0.6 0.6 0 0 1 78.7 -32 L 78.7 -30" stroke="#1C1C1C" stroke-width="0.5" fill="#EDECEE"/>
+      <line class="draw-stroke" x1="75" y1="-30" x2="79" y2="-30" stroke="#E51C55" stroke-width="0.7"/>
+
+      <!-- Paño derecho de Sebka -->
+      <path class="draw-stroke" d="M 79.5 -16.5 L 81.2 -19 L 79.5 -21.5 L 81.2 -24 L 79.5 -26.5 L 81.2 -29 L 79.5 -31.5 L 81.2 -34 M 81.2 -16.5 L 79.5 -19 L 81.2 -21.5 L 79.5 -24 L 81.2 -26.5 L 79.5 -29 L 81.2 -31.5 L 79.5 -34" stroke="#1C1C1C" stroke-width="0.55" fill="none"/>
+
+      <!-- Friso de arquillos ciegos -->
+      <path class="draw-stroke" d="M 72 -34.8 Q 73.2 -36 74.5 -34.8 Q 75.7 -36 77 -34.8 Q 78.2 -36 79.5 -34.8 Q 80.7 -36 82 -34.8" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+      <rect class="draw-stroke" x="71.2" y="-36.5" width="11.6" height="1.2" fill="#1C1C1C"/>
+
+            <!-- NARANJOS ESCALONADOS Y NATURALES POR DELANTE DE LA MURALLA Y DE LA GIRALDA -->
+      <!-- Naranjo 1 (Izquierda) -->
+      <line class="draw-stroke" x1="22" y1="0" x2="22" y2="-6" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="22" cy="-9.2" r="3.2" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="21" cy="-10" r="0.65" fill="#F59E0B"/>
+      <circle class="draw-stroke" cx="23.2" cy="-8.5" r="0.6" fill="#E51C55"/>
+
+      <!-- Naranjo 2 (Izquierda, más alto) -->
+      <line class="draw-stroke" x1="36" y1="0" x2="36" y2="-8" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="36" cy="-12" r="4" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="34.5" cy="-13" r="0.7" fill="#F59E0B"/>
+      <circle class="draw-stroke" cx="37.5" cy="-11" r="0.65" fill="#F59E0B"/>
+
+      <!-- Naranjo 3 (Izquierda, junto a la puerta) -->
+      <line class="draw-stroke" x1="50" y1="0" x2="50" y2="-6.5" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="50" cy="-10" r="3.4" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="48.5" cy="-10.8" r="0.65" fill="#E51C55"/>
+      <circle class="draw-stroke" cx="51.2" cy="-9.2" r="0.65" fill="#F59E0B"/>
+
+      <!-- Naranjo 4 (Flanco izquierdo de la Giralda) -->
+      <line class="draw-stroke" x1="64" y1="0" x2="64" y2="-8" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="64" cy="-12" r="3.8" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="62.5" cy="-12.8" r="0.65" fill="#F59E0B"/>
+      <circle class="draw-stroke" cx="65.2" cy="-11" r="0.6" fill="#E51C55"/>
+
+      <!-- Naranjo 5 (¡POR DELANTE DEL CENTRO DE LA GIRALDA!) -->
+      <line class="draw-stroke" x1="77" y1="0" x2="77" y2="-6.5" stroke="#1C1C1C" stroke-width="1.2" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="77" cy="-10.2" r="3.6" fill="#007A33" stroke="#1C1C1C" stroke-width="0.85"/>
+      <circle class="draw-stroke" cx="75.8" cy="-11" r="0.65" fill="#F59E0B"/>
+      <circle class="draw-stroke" cx="78.2" cy="-9.4" r="0.65" fill="#E51C55"/>
+
+      <!-- Naranjo 6 (Flanco derecho de la Giralda) -->
+      <line class="draw-stroke" x1="90" y1="0" x2="90" y2="-8" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="90" cy="-12" r="3.8" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="88.5" cy="-12.8" r="0.65" fill="#F59E0B"/>
+      <circle class="draw-stroke" cx="91.2" cy="-11" r="0.6" fill="#F59E0B"/>
+
+      <!-- Naranjo 7 (Derecha) -->
+      <line class="draw-stroke" x1="104" y1="0" x2="104" y2="-6.5" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="104" cy="-10" r="3.4" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="102.5" cy="-10.8" r="0.65" fill="#E51C55"/>
+      <circle class="draw-stroke" cx="105.5" cy="-9.2" r="0.65" fill="#F59E0B"/>
+
+      <!-- Naranjo 8 (Derecha, más alto) -->
+      <line class="draw-stroke" x1="118" y1="0" x2="118" y2="-8" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="118" cy="-12" r="4" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="116.5" cy="-13" r="0.7" fill="#F59E0B"/>
+      <circle class="draw-stroke" cx="119.5" cy="-11" r="0.65" fill="#F59E0B"/>
+
+      <!-- Naranjo 9 (Extremo derecho) -->
+      <line class="draw-stroke" x1="132" y1="0" x2="132" y2="-6" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="132" cy="-9.2" r="3.2" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="131" cy="-10" r="0.65" fill="#F59E0B"/>
+      <circle class="draw-stroke" cx="133.2" cy="-8.5" r="0.6" fill="#E51C55"/>
+    </g>
+
+    <!-- Campanario Hernán Ruiz y los 4 Torreoncillos / Jarras de Azucenas -->
+    <g class="tier-3">
+      <rect class="draw-stroke" x="71.3" y="-37.8" width="1.3" height="1.3" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.5"/>
+      <line class="draw-stroke" x1="72" y1="-37.8" x2="72" y2="-43.5" stroke="#1C1C1C" stroke-width="0.8" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="72" cy="-44.2" r="0.75" fill="#E51C55"/>
+
+      <rect class="draw-stroke" x="81.4" y="-37.8" width="1.3" height="1.3" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.5"/>
+      <line class="draw-stroke" x1="82" y1="-37.8" x2="82" y2="-43.5" stroke="#1C1C1C" stroke-width="0.8" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="82" cy="-44.2" r="0.75" fill="#E51C55"/>
+
+      <rect class="draw-stroke" x="73" y="-43.5" width="8" height="7" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+      <path class="draw-stroke" d="M 76 -36.5 L 76 -41 A 1 1 0 0 1 78 -41 L 78 -36.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <path class="draw-stroke" d="M 76.5 -39.8 L 77.5 -39.8 L 77.6 -38.6 L 76.4 -38.6 Z" fill="#E51C55"/>
+      <rect class="draw-stroke" x="73.6" y="-40.5" width="1.2" height="3.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <circle class="draw-stroke" cx="74.2" cy="-39.5" r="0.45" fill="#007A33"/>
+      <rect class="draw-stroke" x="79.2" y="-40.5" width="1.2" height="3.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <circle class="draw-stroke" cx="79.8" cy="-39.5" r="0.45" fill="#007A33"/>
+
+      <circle class="draw-stroke" cx="74.2" cy="-42.3" r="0.5" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="76" cy="-42.3" r="0.5" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="78" cy="-42.3" r="0.5" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="79.8" cy="-42.3" r="0.5" fill="#1C1C1C"/>
+
+      <rect class="draw-stroke" x="72.5" y="-44.5" width="9" height="1" fill="#1C1C1C"/>
+    </g>
+
+    <!-- Cuerpos superiores: Pozo, Cúpula y Giraldillo -->
+    <g class="tier-4">
+      <rect class="draw-stroke" x="74.5" y="-49" width="5" height="4.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+      <path class="draw-stroke" d="M 76 -44.5 L 76 -47.5 A 1 1 0 0 1 78 -47.5 L 78 -44.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <circle class="draw-stroke" cx="77" cy="-46.8" r="0.5" fill="#E51C55"/>
+
+      <line class="draw-stroke" x1="73.5" y1="-44.5" x2="73.5" y2="-47" stroke="#1C1C1C" stroke-width="0.6" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="73.5" cy="-47.5" r="0.4" fill="#007A33"/>
+      <line class="draw-stroke" x1="80.5" y1="-44.5" x2="80.5" y2="-47" stroke="#1C1C1C" stroke-width="0.6" stroke-linecap="round"/>
+      <circle class="draw-stroke" cx="80.5" cy="-47.5" r="0.4" fill="#007A33"/>
+
+      <rect class="draw-stroke" x="75.2" y="-52" width="3.6" height="3" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.6"/>
+      <line class="draw-stroke" x1="76.1" y1="-52" x2="76.1" y2="-49" stroke="#1C1C1C" stroke-width="0.5"/>
+      <line class="draw-stroke" x1="77" y1="-52" x2="77" y2="-49" stroke="#1C1C1C" stroke-width="0.5"/>
+      <line class="draw-stroke" x1="77.9" y1="-52" x2="77.9" y2="-49" stroke="#1C1C1C" stroke-width="0.5"/>
+
+      <path class="draw-stroke" d="M 75 -52 C 75 -54.5 79 -54.5 79 -52 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <circle class="draw-stroke" cx="77" cy="-55.2" r="0.6" fill="#1C1C1C"/>
+      <line class="draw-stroke" x1="77" y1="-55.2" x2="77" y2="-58" stroke="#1C1C1C" stroke-width="0.9"/>
+      <path class="draw-stroke" d="M 77 -57.5 L 75.2 -56.8 L 75.2 -58.2 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.4"/>
+      <circle class="draw-stroke" cx="77" cy="-58.3" r="0.4" fill="#1C1C1C"/>
+    </g>
+  </g>
+    <g id="sceneGranada" class="province-scene">
+    <!-- Nivel 1: Pavimento de mármol del Patio de los Leones y cipreses tras los tejados -->
+    <g class="tier-1">
+      <!-- Cipreses del Generalife que sobresalen tras los tejados (como en la foto real) -->
+      <path class="draw-stroke" d="M 36 -34 C 34 -41 33 -48 36 -53 C 39 -48 38 -41 36 -34 Z" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 118 -34 C 116 -41 115 -48 118 -53 C 121 -48 120 -41 118 -34 Z" fill="#007A33" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Pavimento y plataforma octogonal de la fuente en el suelo del patio (hasta y=0) -->
+      <polygon class="draw-stroke" points="36,0 118,0 126,-4 28,-4" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="77" y1="0" x2="77" y2="-4" stroke="#007A33" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="52" y1="0" x2="55" y2="-4" stroke="#1C1C1C" stroke-width="0.6"/>
+      <line class="draw-stroke" x1="102" y1="0" x2="99" y2="-4" stroke="#1C1C1C" stroke-width="0.6"/>
+    </g>
+
+    <!-- Nivel 2: Galería baja de arcos peraltados y columnas nazaríes que LLEGA DIRECTAMENTE AL SUELO (y=0) -->
+    <g class="tier-2">
+      <!-- Muro de fondo de la galería baja (x=16 a 138, desde y=-23 hasta y=0 a ras de la barra negra) -->
+      <rect class="draw-stroke" x="16" y="-23" width="122" height="23" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Gran arco central de acceso al pabellón (abertura profunda hasta el suelo y=0) -->
+      <path class="draw-stroke" d="M 70 0 L 70 -16 A 7 7 0 0 1 84 -16 L 84 0 Z" fill="#1C1C1C" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Arquería nazarí izquierda: Columnas esbeltas de mármol que bajan hasta el suelo y=0 -->
+      <line class="draw-stroke" x1="22" y1="0" x2="22" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="31" y1="0" x2="31" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="40" y1="0" x2="40" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="49" y1="0" x2="49" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="58" y1="0" x2="58" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="64" y1="0" x2="64" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Basas de las columnas a ras de suelo -->
+      <line class="draw-stroke" x1="20" y1="0" x2="24" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="29" y1="0" x2="33" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="38" y1="0" x2="42" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="47" y1="0" x2="51" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="56" y1="0" x2="60" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <!-- Arcadas peraltadas mocárabes izquierda -->
+      <path class="draw-stroke" d="M 22 -14 Q 26.5 -18 31 -14 Q 35.5 -18 40 -14 Q 44.5 -18 49 -14 Q 53.5 -18 58 -14 Q 61 -18 64 -14 Q 67 -18 70 -14" stroke="#1C1C1C" stroke-width="0.8" fill="none"/>
+
+      <!-- Arquería nazarí derecha: Columnas esbeltas de mármol que bajan hasta el suelo y=0 -->
+      <line class="draw-stroke" x1="90" y1="0" x2="90" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="96" y1="0" x2="96" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="105" y1="0" x2="105" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="114" y1="0" x2="114" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="123" y1="0" x2="123" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="132" y1="0" x2="132" y2="-14" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Basas de las columnas a ras de suelo -->
+      <line class="draw-stroke" x1="88" y1="0" x2="92" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="94" y1="0" x2="98" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="103" y1="0" x2="107" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="112" y1="0" x2="116" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="121" y1="0" x2="125" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="130" y1="0" x2="134" y2="0" stroke="#1C1C1C" stroke-width="1.2"/>
+      <!-- Arcadas peraltadas mocárabes derecha -->
+      <path class="draw-stroke" d="M 84 -14 Q 87 -18 90 -14 Q 93 -18 96 -14 Q 100.5 -18 105 -14 Q 109.5 -18 114 -14 Q 118.5 -18 123 -14 Q 127.5 -18 132 -14" stroke="#1C1C1C" stroke-width="0.8" fill="none"/>
+
+      <!-- Friso de yeserías nazaríes de la galería baja -->
+      <line class="draw-stroke" x1="16" y1="-19" x2="138" y2="-19" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Alero y tejadillo de teja árabe de la galería baja -->
+      <rect class="draw-stroke" x="14" y="-24.5" width="126" height="2" fill="#1C1C1C"/>
+    </g>
+
+    <!-- Nivel 3: Pabellón superior y alas del Patio de los Leones -->
+    <g class="tier-3">
+      <!-- Pabellón central elevado sobre el tejado -->
+      <rect class="draw-stroke" x="60" y="-42" width="34" height="17.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Triple ventana nazarí de arquillos (ajimez con parteluces) -->
+      <path class="draw-stroke" d="M 69 -30 L 69 -35 A 1.8 1.8 0 0 1 72.5 -35 L 72.5 -30 M 74.5 -30 L 74.5 -35.5 A 2.5 2.5 0 0 1 79.5 -35.5 L 79.5 -30 M 81.5 -30 L 81.5 -35 A 1.8 1.8 0 0 1 85 -35 L 85 -30" stroke="#1C1C1C" stroke-width="0.8" fill="#EDECEE"/>
+
+      <!-- 4 Ventanitas cuadradas de ventilación superiores -->
+      <rect class="draw-stroke" x="69.5" y="-39" width="2" height="2" fill="#1C1C1C"/>
+      <rect class="draw-stroke" x="74" y="-39" width="2" height="2" fill="#E51C55"/>
+      <rect class="draw-stroke" x="78" y="-39" width="2" height="2" fill="#E51C55"/>
+      <rect class="draw-stroke" x="82.5" y="-39" width="2" height="2" fill="#1C1C1C"/>
+
+      <!-- Alero de madera tallada y tejado a cuatro aguas del pabellón central -->
+      <rect class="draw-stroke" x="57" y="-43.5" width="40" height="1.8" fill="#1C1C1C"/>
+      <polygon class="draw-stroke" points="56,-43.5 77,-49 98,-43.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="77" y1="-49" x2="64" y2="-43.5" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="77" y1="-49" x2="90" y2="-43.5" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Ala superior izquierda -->
+      <rect class="draw-stroke" x="20" y="-33" width="40" height="8.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+      <rect class="draw-stroke" x="24" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="31" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="38" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="45" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="52" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="18" y="-34.5" width="42" height="1.6" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Ala superior derecha -->
+      <rect class="draw-stroke" x="94" y="-33" width="40" height="8.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+      <rect class="draw-stroke" x="98" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="105" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="112" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="119" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="126" y="-31" width="2" height="3.5" rx="1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.5"/>
+      <rect class="draw-stroke" x="94" y="-34.5" width="42" height="1.6" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+    </g>
+
+    <!-- Nivel 4: Fuente de los Leones monumental con Leones ALTOS Y ESCULPIDOS SEGÚN FOTO REAL -->
+    <g class="tier-4">
+      <!-- Taza dodecagonal de mármol que reposa ALTA sobre el lomo de los leones (y=-18 a -23) -->
+      <polygon class="draw-stroke" points="46,-22 108,-22 102,-17 52,-17" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+      <rect class="draw-stroke" x="44" y="-23.8" width="66" height="1.8" rx="0.4" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Chorro de agua animado (definido en #granadaChorro fuera de los tiers) -->
+
+      <!-- AUTÉNTICOS LEONES NAZARÍES: CUERPOS ALTOS QUE LLEGAN HASTA LA TAZA (y=-17) Y PATAS AL SUELO (y=0) -->
+      
+      <!-- 1. LEÓN CENTRAL FRONTAL (Exacto a la foto de la estatua real: orejas erguidas, cejas estriadas, caño en la boca y patas como columnas) -->
+      <!-- Contorno del cuerpo alto del león central -->
+      <path class="draw-stroke" d="M 72.8 0 L 72.8 -8 L 71.5 -12 C 71 -14.5 72.5 -17 74.5 -17.5 L 79.5 -17.5 C 81.5 -17 83 -14.5 82.5 -12 L 81.2 -8 L 81.2 0 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1" stroke-linejoin="round"/>
+      
+      <!-- Las dos orejas erguidas y redondeadas en lo alto de la cabeza -->
+      <path class="draw-stroke" d="M 73.5 -17.5 C 73 -19 75 -19.5 75.5 -17.8 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <path class="draw-stroke" d="M 80.5 -17.5 C 81 -19 79 -19.5 78.5 -17.8 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Pliegues / arrugas concéntricas de la frente nazarí (rasgo icónico de la foto) -->
+      <path class="draw-stroke" d="M 74 -15.5 Q 77 -16.5 80 -15.5" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+      <path class="draw-stroke" d="M 74.5 -14.2 Q 77 -15.2 79.5 -14.2" stroke="#1C1C1C" stroke-width="0.6" fill="none"/>
+
+      <!-- Hocico y boca recta con el tubo de salida del agua en el centro -->
+      <line class="draw-stroke" x1="74.5" y1="-12.8" x2="79.5" y2="-12.8" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="77" cy="-12.8" r="0.7" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="77" cy="-12.8" r="0.35" fill="#E51C55"/>
+
+      <!-- Melena espesa vertical en el pecho (mechones ondulados característicos de la foto) -->
+      <path class="draw-stroke" d="M 74.2 -11 C 73.8 -9 74.5 -7 74.5 -5 M 76 -11 C 75.8 -8.5 76 -6.5 76 -4 M 78 -11 C 78.2 -8.5 78 -6.5 78 -4 M 79.8 -11 C 80.2 -9 79.5 -7 79.5 -5" stroke="#1C1C1C" stroke-width="0.65" fill="none"/>
+
+      <!-- Las dos patas delanteras rectas y robustas como columnas de mármol -->
+      <line class="draw-stroke" x1="76.2" y1="-7" x2="76.2" y2="0" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="77.8" y1="-7" x2="77.8" y2="0" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Garras talladas en el suelo y=0 -->
+      <path class="draw-stroke" d="M 73 0 L 73 -1.5 Q 74.5 -2 76 0 M 78 0 Q 79.5 -2 81 -1.5 L 81 0" stroke="#1C1C1C" stroke-width="0.8" fill="none"/>
+
+      <!-- 2. LEÓN 1 IZQUIERDA (Perfil hacia la izquierda, cuerpo alto sustentando la taza) -->
+      <!-- Cabeza en perfil mirando a la izquierda con oreja erguida y caño -->
+      <path class="draw-stroke" d="M 67.5 -11 L 62.5 -12.5 C 61.5 -13.2 61.5 -14.8 62.8 -15.5 L 65.5 -16.5 C 67 -17.2 68.5 -17.2 70 -16 L 71.5 -12 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9" stroke-linejoin="round"/>
+      <path class="draw-stroke" d="M 67.5 -16.8 C 67.2 -18.2 69 -18.5 69.2 -16.8 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <circle class="draw-stroke" cx="64" cy="-14" r="0.45" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="62.5" cy="-13" r="0.4" fill="#E51C55"/>
+      <!-- Lomo alto sustentando la taza a y=-17, pata delantera y trasera firmes al suelo y=0 -->
+      <path class="draw-stroke" d="M 70 -16.8 L 73 -16.8 L 73 0 L 71.5 0 L 71 -7 L 67.5 -7 L 67 0 L 65.5 0 L 66 -10.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9" stroke-linejoin="round"/>
+
+      <!-- 3. LEÓN 2 IZQUIERDA EXTERIOR (Más hacia el borde, con boca caño en x=52.5) -->
+      <path class="draw-stroke" d="M 57.5 -11 L 52.5 -12.5 C 51.5 -13.2 51.5 -14.8 52.8 -15.5 L 55.5 -16.5 C 57 -17.2 58.5 -17.2 60 -16 L 61.5 -12 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.85" stroke-linejoin="round"/>
+      <path class="draw-stroke" d="M 57.5 -16.8 C 57.2 -18.2 59 -18.5 59.2 -16.8 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.55"/>
+      <circle class="draw-stroke" cx="54" cy="-14" r="0.4" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="52.5" cy="-12.5" r="0.38" fill="#E51C55"/>
+      <path class="draw-stroke" d="M 60 -16.8 L 63 -16.8 L 63 0 L 61.5 0 L 61 -7 L 57.5 -7 L 57 0 L 55.5 0 L 56 -10.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.85" stroke-linejoin="round"/>
+
+      <!-- 4. LEÓN 1 DERECHA (Perfil hacia la derecha, cuerpo alto sustentando la taza) -->
+      <!-- Cabeza en perfil mirando a la derecha con oreja erguida y caño -->
+      <path class="draw-stroke" d="M 86.5 -11 L 91.5 -12.5 C 92.5 -13.2 92.5 -14.8 91.2 -15.5 L 88.5 -16.5 C 87 -17.2 85.5 -17.2 84 -16 L 82.5 -12 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9" stroke-linejoin="round"/>
+      <path class="draw-stroke" d="M 86.5 -16.8 C 86.8 -18.2 85 -18.5 84.8 -16.8 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <circle class="draw-stroke" cx="90" cy="-14" r="0.45" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="91.5" cy="-13" r="0.4" fill="#E51C55"/>
+      <!-- Lomo alto sustentando la taza a y=-17, pata delantera y trasera firmes al suelo y=0 -->
+      <path class="draw-stroke" d="M 84 -16.8 L 81 -16.8 L 81 0 L 82.5 0 L 83 -7 L 86.5 -7 L 87 0 L 88.5 0 L 88 -10.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9" stroke-linejoin="round"/>
+
+      <!-- 5. LEÓN 2 DERECHA EXTERIOR (Más hacia el borde, con boca caño en x=101.5) -->
+      <path class="draw-stroke" d="M 96.5 -11 L 101.5 -12.5 C 102.5 -13.2 102.5 -14.8 101.2 -15.5 L 98.5 -16.5 C 97 -17.2 95.5 -17.2 94 -16 L 92.5 -12 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.85" stroke-linejoin="round"/>
+      <path class="draw-stroke" d="M 96.5 -16.8 C 96.8 -18.2 95 -18.5 94.8 -16.8 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.55"/>
+      <circle class="draw-stroke" cx="100" cy="-14" r="0.4" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="101.5" cy="-12.5" r="0.38" fill="#E51C55"/>
+      <path class="draw-stroke" d="M 94 -16.8 L 91 -16.8 L 91 0 L 92.5 0 L 93 -7 L 96.5 -7 L 97 0 L 98.5 0 L 98 -10.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.85" stroke-linejoin="round"/>
+    </g>
+
+    <!-- CHORROS DE AGUA EN PARÁBOLA NATURAL: EXACTAMENTE 1 CHORRO POR CADA UNO DE LOS 5 LEONES (5 BOCAS = 5 CHORROS) -->
+    <g id="granadaChorro" style="display: none; opacity: 0;">
+      <!-- 1. León Exterior Izquierdo (boca en x=52.5, y=-12.5): Parábola hacia el extremo izquierdo -->
+      <path class="water-stream" d="M 52.5 -12.5 C 47.5 -13 43 -5.5 42 0" stroke="#E51C55" stroke-width="1.0" stroke-linecap="round" fill="none"/>
+      <line class="water-ripple" x1="39.5" y1="-0.4" x2="44.5" y2="-0.4" stroke="#E51C55" stroke-width="0.8" stroke-linecap="round"/>
+      <circle class="water-drop" cx="42" cy="-2.5" r="0.55" fill="#E51C55"/>
+
+      <!-- 2. León Izquierdo 3/4 (boca en x=62.5, y=-13): Parábola cayendo hacia la izquierda -->
+      <path class="water-stream" d="M 62.5 -13 C 58.5 -13.5 54.5 -6 54 0" stroke="#E51C55" stroke-width="1.15" stroke-linecap="round" fill="none"/>
+      <line class="water-ripple" x1="51" y1="-0.4" x2="57" y2="-0.4" stroke="#E51C55" stroke-width="0.85" stroke-linecap="round"/>
+      <circle class="water-drop" cx="54" cy="-2.5" r="0.6" fill="#E51C55"/>
+
+      <!-- 3. León Central Frontal (boca en x=77, y=-12.8): Chorro vertical directo hacia el canal central -->
+      <path class="water-stream" d="M 77 -12.8 C 77 -9.5 77 -3.5 77 0" stroke="#E51C55" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <line class="water-ripple" x1="74" y1="-0.4" x2="80" y2="-0.4" stroke="#E51C55" stroke-width="0.85" stroke-linecap="round"/>
+      <circle class="water-drop" cx="77" cy="-2.5" r="0.6" fill="#E51C55"/>
+
+      <!-- 4. León Derecho 3/4 (boca en x=91.5, y=-13): Parábola cayendo hacia la derecha -->
+      <path class="water-stream" d="M 91.5 -13 C 95.5 -13.5 99.5 -6 100 0" stroke="#E51C55" stroke-width="1.15" stroke-linecap="round" fill="none"/>
+      <line class="water-ripple" x1="97" y1="-0.4" x2="103" y2="-0.4" stroke="#E51C55" stroke-width="0.85" stroke-linecap="round"/>
+      <circle class="water-drop" cx="100" cy="-2.5" r="0.6" fill="#E51C55"/>
+
+      <!-- 5. León Exterior Derecho (boca en x=101.5, y=-12.5): Parábola hacia el extremo derecho -->
+      <path class="water-stream" d="M 101.5 -12.5 C 106.5 -13 111 -5.5 112 0" stroke="#E51C55" stroke-width="1.0" stroke-linecap="round" fill="none"/>
+      <line class="water-ripple" x1="109.5" y1="-0.4" x2="114.5" y2="-0.4" stroke="#E51C55" stroke-width="0.8" stroke-linecap="round"/>
+      <circle class="water-drop" cx="112" cy="-2.5" r="0.55" fill="#E51C55"/>
+    </g>
+  </g>
+
+  <g id="sceneHuelva" class="province-scene">
+    <!-- Nivel 1: Aguas de la Marisma de Doñana y juncos -->
+    <g class="tier-1">
+      <path class="draw-stroke" d="M 16 -1 Q 24 -3 32 -1 Q 40 -3 48 -1 Q 56 -3 64 -1 Q 72 -3 80 -1 Q 88 -3 96 -1 Q 104 -3 112 -1 Q 120 -3 128 -1 Q 136 -3 144 -1" stroke="#007A33" stroke-width="1.1" fill="none"/>
+      <!-- Juncos / eneas de la marisma -->
+      <path class="draw-stroke" d="M 18 0 L 20 -6 M 21 0 L 24 -8.5 M 25 0 L 26 -5" stroke="#007A33" stroke-width="0.8" stroke-linecap="round"/>
+      <path class="draw-stroke" d="M 134 0 L 132 -6 M 130 0 L 127 -8.5 M 126 0 L 125 -5" stroke="#007A33" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+
+        <!-- BANDADA DE FLAMENCOS CON BATIDO DE ALAS FLUIDO Y VUELO ONDULANTE NATURAL -->
+    <g class="flock-flight-group" id="flockFlight">
+      <!-- Ave 1 (con aleteo fluido continuo) -->
+      <g class="flock-bird" data-x="0" data-y="0" data-s="0.52" transform="translate(0, 0) scale(0.52)">
+        <path fill="#E51C55" d="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z">
+          <animate attributeName="d" dur="0.88s" repeatCount="indefinite"
+                   values="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 -1.42 L 9.51 -1.71 L 7.75 -1.52 L 2.37 -2.01 L 2.17 -1.81 L 2.86 -1.22 L 3.15 2.49 L 2.86 2.89 L 2.56 2.89 L 2.17 2.3 L 1.49 2.49 L 0.7 1.32 L 0.12 -0.24 L -0.96 -1.52 L -3.5 -1.52 L -7.51 -0.05 L -7.9 -0.15 L -4.77 -1.12 L -8.0 -0.73 L -2.92 -1.71 L 1.1 -2.98 L 1.98 -2.89 L 3.25 -2.2 L 7.75 -1.71 L 9.41 -2.1 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z" calcMode="discrete" begin="0s" />
+        </path>
+      </g>
+      <!-- Ave 2 (con aleteo fluido continuo) -->
+      <g class="flock-bird" data-x="-6.5" data-y="-3.5" data-s="0.48" transform="translate(-6.5, -3.5) scale(0.48)">
+        <path fill="#E51C55" d="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z">
+          <animate attributeName="d" dur="0.84s" repeatCount="indefinite"
+                   values="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 -1.42 L 9.51 -1.71 L 7.75 -1.52 L 2.37 -2.01 L 2.17 -1.81 L 2.86 -1.22 L 3.15 2.49 L 2.86 2.89 L 2.56 2.89 L 2.17 2.3 L 1.49 2.49 L 0.7 1.32 L 0.12 -0.24 L -0.96 -1.52 L -3.5 -1.52 L -7.51 -0.05 L -7.9 -0.15 L -4.77 -1.12 L -8.0 -0.73 L -2.92 -1.71 L 1.1 -2.98 L 1.98 -2.89 L 3.25 -2.2 L 7.75 -1.71 L 9.41 -2.1 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z" calcMode="discrete" begin="0.06s" />
+        </path>
+      </g>
+      <!-- Ave 3 (con aleteo fluido continuo) -->
+      <g class="flock-bird" data-x="-13" data-y="-6" data-s="0.45" transform="translate(-13, -6) scale(0.45)">
+        <path fill="#E51C55" d="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z">
+          <animate attributeName="d" dur="0.92s" repeatCount="indefinite"
+                   values="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 -1.42 L 9.51 -1.71 L 7.75 -1.52 L 2.37 -2.01 L 2.17 -1.81 L 2.86 -1.22 L 3.15 2.49 L 2.86 2.89 L 2.56 2.89 L 2.17 2.3 L 1.49 2.49 L 0.7 1.32 L 0.12 -0.24 L -0.96 -1.52 L -3.5 -1.52 L -7.51 -0.05 L -7.9 -0.15 L -4.77 -1.12 L -8.0 -0.73 L -2.92 -1.71 L 1.1 -2.98 L 1.98 -2.89 L 3.25 -2.2 L 7.75 -1.71 L 9.41 -2.1 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z" calcMode="discrete" begin="0.12s" />
+        </path>
+      </g>
+      <!-- Ave 4 (con aleteo fluido continuo) -->
+      <g class="flock-bird" data-x="-7.5" data-y="3" data-s="0.49" transform="translate(-7.5, 3) scale(0.49)">
+        <path fill="#E51C55" d="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z">
+          <animate attributeName="d" dur="0.88s" repeatCount="indefinite"
+                   values="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 -1.42 L 9.51 -1.71 L 7.75 -1.52 L 2.37 -2.01 L 2.17 -1.81 L 2.86 -1.22 L 3.15 2.49 L 2.86 2.89 L 2.56 2.89 L 2.17 2.3 L 1.49 2.49 L 0.7 1.32 L 0.12 -0.24 L -0.96 -1.52 L -3.5 -1.52 L -7.51 -0.05 L -7.9 -0.15 L -4.77 -1.12 L -8.0 -0.73 L -2.92 -1.71 L 1.1 -2.98 L 1.98 -2.89 L 3.25 -2.2 L 7.75 -1.71 L 9.41 -2.1 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z" calcMode="discrete" begin="0.04s" />
+        </path>
+      </g>
+      <!-- Ave 5 (con aleteo fluido continuo) -->
+      <g class="flock-bird" data-x="-14.5" data-y="6" data-s="0.46" transform="translate(-14.5, 6) scale(0.46)">
+        <path fill="#E51C55" d="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z">
+          <animate attributeName="d" dur="0.90s" repeatCount="indefinite"
+                   values="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 -1.42 L 9.51 -1.71 L 7.75 -1.52 L 2.37 -2.01 L 2.17 -1.81 L 2.86 -1.22 L 3.15 2.49 L 2.86 2.89 L 2.56 2.89 L 2.17 2.3 L 1.49 2.49 L 0.7 1.32 L 0.12 -0.24 L -0.96 -1.52 L -3.5 -1.52 L -7.51 -0.05 L -7.9 -0.15 L -4.77 -1.12 L -8.0 -0.73 L -2.92 -1.71 L 1.1 -2.98 L 1.98 -2.89 L 3.25 -2.2 L 7.75 -1.71 L 9.41 -2.1 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z" calcMode="discrete" begin="0.15s" />
+        </path>
+      </g>
+      <!-- Ave 6 (con aleteo fluido continuo) -->
+      <g class="flock-bird" data-x="-20" data-y="-1" data-s="0.44" transform="translate(-20, -1) scale(0.44)">
+        <path fill="#E51C55" d="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z">
+          <animate attributeName="d" dur="0.84s" repeatCount="indefinite"
+                   values="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 -1.42 L 9.51 -1.71 L 7.75 -1.52 L 2.37 -2.01 L 2.17 -1.81 L 2.86 -1.22 L 3.15 2.49 L 2.86 2.89 L 2.56 2.89 L 2.17 2.3 L 1.49 2.49 L 0.7 1.32 L 0.12 -0.24 L -0.96 -1.52 L -3.5 -1.52 L -7.51 -0.05 L -7.9 -0.15 L -4.77 -1.12 L -8.0 -0.73 L -2.92 -1.71 L 1.1 -2.98 L 1.98 -2.89 L 3.25 -2.2 L 7.75 -1.71 L 9.41 -2.1 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z" calcMode="discrete" begin="0.09s" />
+        </path>
+      </g>
+      <!-- Ave 7 (con aleteo fluido continuo) -->
+      <g class="flock-bird" data-x="-25" data-y="3" data-s="0.42" transform="translate(-25, 3) scale(0.42)">
+        <path fill="#E51C55" d="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z">
+          <animate attributeName="d" dur="0.88s" repeatCount="indefinite"
+                   values="M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 -1.42 L 9.51 -1.71 L 7.75 -1.52 L 2.37 -2.01 L 2.17 -1.81 L 2.86 -1.22 L 3.15 2.49 L 2.86 2.89 L 2.56 2.89 L 2.17 2.3 L 1.49 2.49 L 0.7 1.32 L 0.12 -0.24 L -0.96 -1.52 L -3.5 -1.52 L -7.51 -0.05 L -7.9 -0.15 L -4.77 -1.12 L -8.0 -0.73 L -2.92 -1.71 L 1.1 -2.98 L 1.98 -2.89 L 3.25 -2.2 L 7.75 -1.71 L 9.41 -2.1 Z; M 9.9 0.05 L 9.1 -0.15 L 8.29 0.15 L 2.16 0.15 L 1.35 0.65 L -0.16 0.96 L -1.36 0.65 L -3.37 0.75 L -7.3 2.26 L -7.9 2.26 L -7.6 2.06 L -8.0 1.96 L -5.49 1.36 L -3.57 0.55 L -2.87 0.55 L -0.76 -0.25 L -0.46 -0.75 L 0.75 -1.56 L 2.06 -2.06 L 2.26 -1.96 L 2.76 -2.36 L 2.56 -1.06 L 1.96 -0.96 L 1.96 -0.65 L 2.66 -0.25 L 3.46 -0.05 L 7.89 -0.25 L 8.49 -0.55 L 9.4 -0.55 Z; M 9.9 0.97 L 9.9 1.18 L 9.49 0.87 L 7.14 0.87 L 5.4 1.28 L 2.13 1.18 L 1.31 1.59 L -0.74 1.59 L -1.66 2.2 L -1.45 1.59 L -1.55 1.28 L -2.88 1.18 L -6.87 2.2 L -7.79 2.2 L -8.0 1.89 L -5.34 1.59 L -3.29 0.97 L -1.55 0.77 L -0.74 0.05 L -0.74 -1.07 L -0.33 -1.69 L -0.43 -1.89 L -0.02 -2.2 L 1.51 -2.3 L 2.13 -1.99 L 1.62 -1.18 L 1.62 -0.26 L 2.23 0.46 L 3.56 1.07 L 5.6 1.07 L 6.63 0.77 L 7.75 0.77 L 8.37 0.46 L 9.29 0.46 Z" calcMode="discrete" begin="0.18s" />
+        </path>
+      </g>
+    </g>
+
+    <!-- Nivel 2: Ermita del Rocío al fondo (Almonte, Huelva) -->
+    <g class="tier-2">
+      <!-- Cuerpo bajo encalado del Santuario del Rocío -->
+      <rect class="draw-stroke" x="42" y="-16" width="68" height="15" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+
+      <!-- Gran pórtico central arqueado de la Ermita -->
+      <path class="draw-stroke" d="M 69 -1 L 69 -11 A 7 7 0 0 1 83 -11 L 83 -1 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 72.5 -1 L 72.5 -8.5 A 3.5 3.5 0 0 1 79.5 -8.5 L 79.5 -1 Z" fill="#1C1C1C"/>
+
+      <!-- Arquerías de las alas laterales del santuario -->
+      <rect class="draw-stroke" x="46" y="-10" width="3.5" height="6" rx="1.75" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="52" y="-10" width="3.5" height="6" rx="1.75" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="58" y="-10" width="3.5" height="6" rx="1.75" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+
+      <rect class="draw-stroke" x="94" y="-10" width="3.5" height="6" rx="1.75" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="100" y="-10" width="3.5" height="6" rx="1.75" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+
+      <!-- Tejadillos de teja árabe en las alas -->
+      <line class="draw-stroke" x1="40" y1="-16" x2="112" y2="-16" stroke="#1C1C1C" stroke-width="1"/>
+
+      <!-- Cúpula del crucero de la Ermita (a la derecha) -->
+      <rect class="draw-stroke" x="88" y="-22" width="14" height="6" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 88 -22 C 88 -28 102 -28 102 -22 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="95" y1="-28" x2="95" y2="-31" stroke="#1C1C1C" stroke-width="0.7"/>
+    </g>
+
+    <!-- Nivel 3: La monumental Espadaña escalonada del Rocío -->
+    <g class="tier-3">
+      <!-- Primer cuerpo de la espadaña con 4 campanas -->
+      <rect class="draw-stroke" x="65" y="-26" width="22" height="10" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <rect class="draw-stroke" x="67.5" y="-24" width="2.5" height="5.5" rx="1.2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="72.5" y="-24" width="2.5" height="5.5" rx="1.2" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="77" y="-24" width="2.5" height="5.5" rx="1.2" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="82" y="-24" width="2.5" height="5.5" rx="1.2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <line class="draw-stroke" x1="63" y1="-26" x2="89" y2="-26" stroke="#1C1C1C" stroke-width="0.9"/>
+
+      <!-- Segundo cuerpo de la espadaña con 2 campanas -->
+      <rect class="draw-stroke" x="69" y="-35" width="14" height="9" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+      <rect class="draw-stroke" x="71.5" y="-33" width="3" height="5.5" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="77.5" y="-33" width="3" height="5.5" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <line class="draw-stroke" x1="67" y1="-35" x2="85" y2="-35" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Tercer cuerpo remate y campanil superior -->
+      <rect class="draw-stroke" x="72.5" y="-42" width="7" height="7" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 74.5 -35 L 74.5 -39.5 A 1.5 1.5 0 0 1 77.5 -39.5 L 77.5 -35 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.6"/>
+      <polygon class="draw-stroke" points="72.5,-42 76,-46 79.5,-42" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Gran Cruz de hierro del Rocío -->
+      <line class="draw-stroke" x1="76" y1="-46" x2="76" y2="-51" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="74" y1="-49" x2="78" y2="-49" stroke="#1C1C1C" stroke-width="1.1"/>
+    </g>
+  </g>
+
+  <g id="sceneCadiz" class="province-scene">
+    <!-- Nivel 1: Escalinata monumental, Plaza de la Catedral, Palmera andaluza y Malecón del Campo del Sur con oleaje atlántico -->
+    <g class="tier-1">
+      <!-- Escalinata monumental de la plaza -->
+      <rect class="draw-stroke" x="16" y="-1.5" width="122" height="1.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <rect class="draw-stroke" x="18" y="-3.5" width="118" height="2" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="18" y1="-1.8" x2="136" y2="-1.8" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Palmera de la Plaza de la Catedral (izquierda) -->
+      <path class="draw-stroke" d="M 10 0 Q 8.5 -9 11 -18" stroke="#78350F" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <path class="draw-stroke" d="M 11 -18 Q 5 -20 2 -16" stroke="#007A33" stroke-width="1.1" fill="none"/>
+      <path class="draw-stroke" d="M 11 -18 Q 6 -24 4 -22" stroke="#007A33" stroke-width="1.1" fill="none"/>
+      <path class="draw-stroke" d="M 11 -18 Q 13 -26 16 -23" stroke="#007A33" stroke-width="1.1" fill="none"/>
+      <path class="draw-stroke" d="M 11 -18 Q 17 -21 18 -17" stroke="#007A33" stroke-width="1.1" fill="none"/>
+      <circle class="draw-stroke" cx="11" cy="-18" r="0.9" fill="#007A33"/>
+
+      <!-- Malecón del Campo del Sur y olas del Atlántico (derecha, Catedral sobre el Mar) -->
+      <line class="draw-stroke" x1="136" y1="-3.5" x2="153" y2="-3.5" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="136" y1="-1.2" x2="153" y2="-1.2" stroke="#1C1C1C" stroke-width="0.7"/>
+      <path class="draw-stroke" d="M 137 -0.8 Q 140.5 -2.2 144 -0.8 Q 147.5 -2.2 151 -0.8 Q 153 -1.8 154 -0.8" fill="none" stroke="#0284C7" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Nivel 2: Fachada Monumental Neoclásica, Gran Portada Triunfal y Cuerpos Bajos de las Torres -->
+    <g class="tier-2">
+      <!-- Cuerpo bajo de la fachada central (x=45 a 109) -->
+      <rect class="draw-stroke" x="45" y="-18" width="64" height="14.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Portada central mayor con columnas corintias monumentales y gran arco triunfal -->
+      <path class="draw-stroke" d="M 71.5 -3.5 L 71.5 -13 A 5.5 5.5 0 0 1 82.5 -13 L 82.5 -3.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9"/>
+      <path class="draw-stroke" d="M 73.5 -3.5 L 73.5 -11.5 A 3.5 3.5 0 0 1 80.5 -11.5 L 80.5 -3.5 Z" fill="#1C1C1C"/>
+      <line class="draw-stroke" x1="67" y1="-3.5" x2="67" y2="-18" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="69.5" y1="-3.5" x2="69.5" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="84.5" y1="-3.5" x2="84.5" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="87" y1="-3.5" x2="87" y2="-18" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Puertas laterales y medallones u óculos circulares -->
+      <rect class="draw-stroke" x="52.5" y="-10" width="7" height="6.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <polygon class="draw-stroke" points="51.5,-10 56,-12 60.5,-10" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+      <circle class="draw-stroke" cx="56" cy="-14.5" r="2.2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <rect class="draw-stroke" x="94.5" y="-10" width="7" height="6.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <polygon class="draw-stroke" points="93.5,-10 98,-12 102.5,-10" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+      <circle class="draw-stroke" cx="98" cy="-14.5" r="2.2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Gran cornisa que divide el cuerpo bajo y el ático -->
+      <line class="draw-stroke" x1="45" y1="-18" x2="109" y2="-18" stroke="#1C1C1C" stroke-width="1.2"/>
+
+      <!-- Cuerpos bajos almohadillados de las Torres laterales -->
+      <!-- Torre Izquierda (Torre de Poniente) -->
+      <rect class="draw-stroke" x="20" y="-18" width="25" height="14.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="20" y1="-10.5" x2="45" y2="-10.5" stroke="#1C1C1C" stroke-width="0.7"/>
+      <rect class="draw-stroke" x="28.5" y="-14.5" width="8" height="7.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Torre Derecha (Torre de Levante) -->
+      <rect class="draw-stroke" x="109" y="-18" width="25" height="14.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="109" y1="-10.5" x2="134" y2="-10.5" stroke="#1C1C1C" stroke-width="0.7"/>
+      <rect class="draw-stroke" x="117.5" y="-14.5" width="8" height="7.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Segundo cuerpo intermedio de las Torres (y=-18 a -28) con ventanales y balaustrada volada -->
+      <rect class="draw-stroke" x="21" y="-28" width="23" height="10" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <rect class="draw-stroke" x="29" y="-26" width="7" height="6" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="19" y1="-28" x2="46" y2="-28" stroke="#1C1C1C" stroke-width="1.2"/>
+
+      <rect class="draw-stroke" x="110" y="-28" width="23" height="10" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <rect class="draw-stroke" x="118" y="-26" width="7" height="6" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="108" y1="-28" x2="135" y2="-28" stroke="#1C1C1C" stroke-width="1.2"/>
+
+      <!-- Segundo cuerpo de la nave central y Monumental Frontón Curvo (exacto a la foto real) -->
+      <rect class="draw-stroke" x="58" y="-24" width="38" height="6" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <path class="draw-stroke" d="M 73.5 -18 L 73.5 -23 A 3.5 3.5 0 0 1 80.5 -23 L 80.5 -18 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <!-- El gran frontón curvo semicircular neoclásico que corona la nave central -->
+      <path class="draw-stroke" d="M 58 -24 C 64 -30 90 -30 96 -24 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+      <circle class="draw-stroke" cx="77" cy="-26.8" r="1.7" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.6"/>
+      <!-- Balaustradas laterales del ático central -->
+      <line class="draw-stroke" x1="45" y1="-20.5" x2="58" y2="-20.5" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="96" y1="-20.5" x2="109" y2="-20.5" stroke="#1C1C1C" stroke-width="0.9"/>
+    </g>
+
+    <!-- Nivel 3: La Cúpula Dorada sobre Tambor + Esbeltos Cuerpos de Campanas Octogonales de las Torres -->
+    <g class="tier-3">
+      <!-- Tambor cilíndrico conectado directamente detrás del frontón central (y=-24 a -30) -->
+      <rect class="draw-stroke" x="65" y="-30" width="24" height="6" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="69" y1="-30" x2="69" y2="-24" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="74" y1="-30" x2="74" y2="-24" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="80" y1="-30" x2="80" y2="-24" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="85" y1="-30" x2="85" y2="-24" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="63.5" y1="-30" x2="90.5" y2="-30" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- La famosa Cúpula Dorada de Cádiz: integrada detrás de la fachada, alcanzando y=-39 (mucho más baja que las torres) -->
+      <path class="draw-stroke" d="M 65 -30 C 65 -39 89 -39 89 -30 Z" fill="#F59E0B" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="77" y1="-39" x2="77" y2="-30" stroke="#B45309" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 77 -39 C 73 -36 70 -33 70 -30" fill="none" stroke="#B45309" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 77 -39 C 81 -36 84 -33 84 -30" fill="none" stroke="#B45309" stroke-width="0.8"/>
+      <!-- Linterna y cupulín de la cúpula dorada (alcanza y=-42) -->
+      <rect class="draw-stroke" x="75" y="-40.5" width="4" height="1.5" fill="#F59E0B" stroke="#1C1C1C" stroke-width="0.7"/>
+      <circle class="draw-stroke" cx="77" cy="-41.3" r="0.9" fill="#F59E0B" stroke="#1C1C1C" stroke-width="0.6"/>
+
+      <!-- Torre Izquierda: Cuerpo de campanas octogonal con columnas esquineras y arcos abiertos (y=-28 a -42) -->
+      <rect class="draw-stroke" x="22.5" y="-42" width="20" height="14" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="25" y1="-28" x2="25" y2="-42" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="40" y1="-28" x2="40" y2="-42" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 28 -28 L 28 -37.5 A 4.5 4.5 0 0 1 37 -37.5 L 37 -28 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Campana de bronce en la torre izquierda -->
+      <path class="draw-stroke" d="M 31 -35 L 34 -35 L 34.5 -32 L 30.5 -32 Z" fill="#007A33" stroke="#1C1C1C" stroke-width="0.5"/>
+      <circle class="draw-stroke" cx="32.5" cy="-31.5" r="0.8" fill="#007A33"/>
+      <!-- Gran cornisa de la torre con peanas esquineras neoclásicas (flameros) -->
+      <line class="draw-stroke" x1="20.5" y1="-42" x2="44.5" y2="-42" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="22" y1="-42" x2="22" y2="-43.8" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="43" y1="-42" x2="43" y2="-43.8" stroke="#1C1C1C" stroke-width="0.8"/>
+
+      <!-- Torre Derecha: Cuerpo de campanas octogonal con columnas esquineras y arcos abiertos (y=-28 a -42) -->
+      <rect class="draw-stroke" x="111.5" y="-42" width="20" height="14" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="114" y1="-28" x2="114" y2="-42" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="129" y1="-28" x2="129" y2="-42" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 117 -28 L 117 -37.5 A 4.5 4.5 0 0 1 126 -37.5 L 126 -28 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Campana de bronce en la torre derecha -->
+      <path class="draw-stroke" d="M 120 -35 L 123 -35 L 123.5 -32 L 119.5 -32 Z" fill="#007A33" stroke="#1C1C1C" stroke-width="0.5"/>
+      <circle class="draw-stroke" cx="121.5" cy="-31.5" r="0.8" fill="#007A33"/>
+      <!-- Gran cornisa de la torre con peanas esquineras neoclásicas (flameros) -->
+      <line class="draw-stroke" x1="109.5" y1="-42" x2="133.5" y2="-42" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="111" y1="-42" x2="111" y2="-43.8" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="132" y1="-42" x2="132" y2="-43.8" stroke="#1C1C1C" stroke-width="0.8"/>
+    </g>
+
+    <!-- Nivel 4: Ático Octogonal, Grandes Cúpulas de Piedra Clásicas, Linternas y Cruces (Las torres se alzan hasta y=-59, claramente más altas que la cúpula dorada) -->
+    <g class="tier-4">
+      <!-- Torre Izquierda: Ático octogonal (y=-42 a -47) -->
+      <rect class="draw-stroke" x="24" y="-47" width="17" height="5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+      <circle class="draw-stroke" cx="32.5" cy="-44.5" r="1.3" fill="#E51C55"/>
+      <line class="draw-stroke" x1="23" y1="-47" x2="42" y2="-47" stroke="#1C1C1C" stroke-width="1"/>
+
+      <!-- La gran Cúpula de Piedra de la Torre Izquierda (y=-47 a -54.5) -->
+      <path class="draw-stroke" d="M 23.5 -47 C 23.5 -54.5 41.5 -54.5 41.5 -47 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="32.5" y1="-54.5" x2="32.5" y2="-47" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 32.5 -54.5 C 28.5 -51 26.5 -49 26.5 -47" fill="none" stroke="#1C1C1C" stroke-width="0.7"/>
+      <path class="draw-stroke" d="M 32.5 -54.5 C 36.5 -51 38.5 -49 38.5 -47" fill="none" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Linterna cilíndrica con columnas y Cruz de la Torre Izquierda (hasta y=-59) -->
+      <rect class="draw-stroke" x="30" y="-57" width="5" height="2.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 29.5 -57 C 29.5 -58.5 35.5 -58.5 35.5 -57 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="32.5" y1="-58.5" x2="32.5" y2="-61" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <line class="draw-stroke" x1="30.8" y1="-59.8" x2="34.2" y2="-59.8" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+
+      <!-- Torre Derecha: Ático octogonal (y=-42 a -47) -->
+      <rect class="draw-stroke" x="113" y="-47" width="17" height="5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.9"/>
+      <circle class="draw-stroke" cx="121.5" cy="-44.5" r="1.3" fill="#E51C55"/>
+      <line class="draw-stroke" x1="112" y1="-47" x2="131" y2="-47" stroke="#1C1C1C" stroke-width="1"/>
+
+      <!-- La gran Cúpula de Piedra de la Torre Derecha (y=-47 a -54.5) -->
+      <path class="draw-stroke" d="M 112.5 -47 C 112.5 -54.5 130.5 -54.5 130.5 -47 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="1.2"/>
+      <line class="draw-stroke" x1="121.5" y1="-54.5" x2="121.5" y2="-47" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 121.5 -54.5 C 117.5 -51 115.5 -49 115.5 -47" fill="none" stroke="#1C1C1C" stroke-width="0.7"/>
+      <path class="draw-stroke" d="M 121.5 -54.5 C 125.5 -51 127.5 -49 127.5 -47" fill="none" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Linterna cilíndrica con columnas y Cruz de la Torre Derecha (hasta y=-59) -->
+      <rect class="draw-stroke" x="119" y="-57" width="5" height="2.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 118.5 -57 C 118.5 -58.5 124.5 -58.5 124.5 -57 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="121.5" y1="-58.5" x2="121.5" y2="-61" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+      <line class="draw-stroke" x1="119.8" y1="-59.8" x2="123.2" y2="-59.8" stroke="#1C1C1C" stroke-width="1.1" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g id="sceneJaen" class="province-scene">
+    <!-- Nivel 1: Podio y escalinata monumental de la Catedral de Jaén -->
+    <g class="tier-1">
+      <rect class="draw-stroke" x="20" y="-3.5" width="114" height="3.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="20" y1="-1.8" x2="134" y2="-1.8" stroke="#1C1C1C" stroke-width="0.7"/>
+    </g>
+
+    <!-- Nivel 2: Fachada Renacentista fiel al vector jaen_logo.png (Triple portada, columnas y hornacinas) -->
+    <g class="tier-2">
+      <!-- Cuerpo bajo de la fachada y bases de las torres (x=22 a 132) -->
+      <rect class="draw-stroke" x="22" y="-18" width="110" height="14.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+
+      <!-- Puerta central mayor (Puerta del Perdón) -->
+      <path class="draw-stroke" d="M 72 -3.5 L 72 -11 A 5 5 0 0 1 82 -11 L 82 -3.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9"/>
+      <path class="draw-stroke" d="M 74 -3.5 L 74 -9.5 A 3 3 0 0 1 80 -9.5 L 80 -3.5 Z" fill="#E51C55"/>
+
+      <!-- Portada izquierda -->
+      <path class="draw-stroke" d="M 48 -3.5 L 48 -9 A 3.5 3.5 0 0 1 55 -9 L 55 -3.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 50 -3.5 L 50 -8 A 1.5 1.5 0 0 1 53 -8 L 53 -3.5 Z" fill="#1C1C1C"/>
+
+      <!-- Portada derecha -->
+      <path class="draw-stroke" d="M 99 -3.5 L 99 -9 A 3.5 3.5 0 0 1 106 -9 L 106 -3.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 101 -3.5 L 101 -8 A 1.5 1.5 0 0 1 104 -8 L 104 -3.5 Z" fill="#1C1C1C"/>
+
+      <!-- 4 Columnas monumentales que estructuran la fachada -->
+      <line class="draw-stroke" x1="43" y1="-3.5" x2="43" y2="-18" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="65" y1="-3.5" x2="65" y2="-18" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="89" y1="-3.5" x2="89" y2="-18" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="111" y1="-3.5" x2="111" y2="-18" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Fila de hornacinas/ventanales arqueados superiores del primer cuerpo (del logo) -->
+      <rect class="draw-stroke" x="28" y="-16" width="5" height="6" rx="2.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="28" y="-7.5" width="5" height="3.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="57.5" y="-15.5" width="4.5" height="5" rx="2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="74.5" y="-16" width="5" height="4.5" rx="2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="92" y="-15.5" width="4.5" height="5" rx="2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="121" y="-16" width="5" height="6" rx="2.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="121" y="-7.5" width="5" height="3.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+
+      <!-- Gran cornisa que divide el cuerpo 1 y el cuerpo 2 -->
+      <line class="draw-stroke" x1="19" y1="-18" x2="135" y2="-18" stroke="#1C1C1C" stroke-width="1.3"/>
+
+      <!-- Segundo cuerpo central con ventanas rematadas en frontoncillos triangulares (exacto a jaen_logo.png) -->
+      <rect class="draw-stroke" x="43" y="-26.5" width="68" height="8.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <!-- Ventana izquierda 1 y frontón -->
+      <rect class="draw-stroke" x="49" y="-23.5" width="4.5" height="4.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <polygon class="draw-stroke" points="48,-23.5 51.25,-25.5 54.5,-23.5" fill="#1C1C1C"/>
+      <!-- Ventana izquierda 2 y frontón -->
+      <rect class="draw-stroke" x="60" y="-23.5" width="4.5" height="4.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <polygon class="draw-stroke" points="59,-23.5 62.25,-25.5 65.5,-23.5" fill="#1C1C1C"/>
+
+      <!-- Ventana central arqueada de la fachada -->
+      <path class="draw-stroke" d="M 74.5 -19 L 74.5 -24 A 2.5 2.5 0 0 1 79.5 -24 L 79.5 -19 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <circle class="draw-stroke" cx="77" cy="-22" r="1.1" fill="#E51C55"/>
+
+      <!-- Ventana derecha 1 y frontón -->
+      <rect class="draw-stroke" x="89.5" y="-23.5" width="4.5" height="4.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <polygon class="draw-stroke" points="88.5,-23.5 91.75,-25.5 95,-23.5" fill="#1C1C1C"/>
+      <!-- Ventana derecha 2 y frontón -->
+      <rect class="draw-stroke" x="100.5" y="-23.5" width="4.5" height="4.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <polygon class="draw-stroke" points="99.5,-23.5 102.75,-25.5 106,-23.5" fill="#1C1C1C"/>
+
+      <!-- Frontón triangular central y cubierta superior de la nave (del logo) -->
+      <polygon class="draw-stroke" points="60,-26.5 77,-32 94,-26.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="43" y1="-29" x2="111" y2="-29" stroke="#1C1C1C" stroke-width="0.9"/>
+    </g>
+
+    <!-- Nivel 3: Primer cuerpo de campanas de las Torres gemelas con las 3 arcadas verticales '0 0 0' -->
+    <g class="tier-3">
+      <!-- Torre Izquierda (x=23 a 43) -->
+      <rect class="draw-stroke" x="23" y="-35" width="20" height="17" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <!-- 3 arcadas verticales alargadas '0 0 0' -->
+      <rect class="draw-stroke" x="25.5" y="-32" width="3" height="10" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <rect class="draw-stroke" x="31" y="-33.5" width="3.5" height="12" rx="1.75" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8"/>
+      <rect class="draw-stroke" x="37" y="-32" width="3" height="10" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="21" y1="-35" x2="45" y2="-35" stroke="#1C1C1C" stroke-width="1"/>
+
+      <!-- Torre Derecha (x=111 a 131) -->
+      <rect class="draw-stroke" x="111" y="-35" width="20" height="17" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <!-- 3 arcadas verticales alargadas '0 0 0' -->
+      <rect class="draw-stroke" x="114" y="-32" width="3" height="10" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <rect class="draw-stroke" x="119.5" y="-33.5" width="3.5" height="12" rx="1.75" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.8"/>
+      <rect class="draw-stroke" x="125.5" y="-32" width="3" height="10" rx="1.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="109" y1="-35" x2="133" y2="-35" stroke="#1C1C1C" stroke-width="1"/>
+    </g>
+
+    <!-- Nivel 4: Segundo cuerpo escalonado con arcadas '0 0 0', Cúpulas semiesféricas y Cruces sobre Esferas -->
+    <g class="tier-4">
+      <!-- Torre Izquierda: Segundo cuerpo con 3 vanos '0 0 0' -->
+      <rect class="draw-stroke" x="25.5" y="-46" width="15" height="11" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <rect class="draw-stroke" x="27.2" y="-44" width="2.2" height="7.5" rx="1.1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="31.4" y="-45" width="2.5" height="8.5" rx="1.25" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.7"/>
+      <rect class="draw-stroke" x="35.8" y="-44" width="2.2" height="7.5" rx="1.1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <line class="draw-stroke" x1="24" y1="-46" x2="42" y2="-46" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Cúpula semiesférica de Jaén -->
+      <path class="draw-stroke" d="M 25.5 -46 C 25.5 -53 39.5 -53 39.5 -46 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <!-- Esfera y Cruz sobre la cúpula izquierda -->
+      <circle class="draw-stroke" cx="32.5" cy="-54" r="1.1" fill="#1C1C1C"/>
+      <line class="draw-stroke" x1="32.5" y1="-54" x2="32.5" y2="-58" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="30.5" y1="-56.5" x2="34.5" y2="-56.5" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Torre Derecha: Segundo cuerpo con 3 vanos '0 0 0' -->
+      <rect class="draw-stroke" x="113.5" y="-46" width="15" height="11" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <rect class="draw-stroke" x="115.2" y="-44" width="2.2" height="7.5" rx="1.1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="119.4" y="-45" width="2.5" height="8.5" rx="1.25" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.7"/>
+      <rect class="draw-stroke" x="123.8" y="-44" width="2.2" height="7.5" rx="1.1" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <line class="draw-stroke" x1="112" y1="-46" x2="130" y2="-46" stroke="#1C1C1C" stroke-width="0.9"/>
+      <!-- Cúpula semiesférica de Jaén -->
+      <path class="draw-stroke" d="M 113.5 -46 C 113.5 -53 127.5 -53 127.5 -46 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <!-- Esfera y Cruz sobre la cúpula derecha -->
+      <circle class="draw-stroke" cx="120.5" cy="-54" r="1.1" fill="#1C1C1C"/>
+      <line class="draw-stroke" x1="120.5" y1="-54" x2="120.5" y2="-58" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="118.5" y1="-56.5" x2="122.5" y2="-56.5" stroke="#1C1C1C" stroke-width="1.1"/>
+    </g>
+  </g>
+
+                <g id="sceneMalaga" class="province-scene">
+    <!-- Nivel 1: Podio y escalinata de la Catedral de la Encarnación (Málaga) -->
+    <g class="tier-1">
+      <rect class="draw-stroke" x="20" y="-3.5" width="114" height="3.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="20" y1="-1.8" x2="134" y2="-1.8" stroke="#1C1C1C" stroke-width="0.7"/>
+    </g>
+
+    <!-- Nivel 2: Fachada Renacentista-Barroca y Cuerpos Bajos con Columnas Corintias -->
+    <g class="tier-2">
+      <!-- Cuerpo bajo de la fachada (x=48 a 106) -->
+      <rect class="draw-stroke" x="48" y="-18" width="58" height="14.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+
+      <!-- Gran Portada Central con Medallón Circular en relieve -->
+      <path class="draw-stroke" d="M 71 -3.5 L 71 -12 A 6 6 0 0 1 83 -12 L 83 -3.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.9"/>
+      <path class="draw-stroke" d="M 73.5 -3.5 L 73.5 -10 A 3.5 3.5 0 0 1 80.5 -10 L 80.5 -3.5 Z" fill="#1C1C1C"/>
+      <circle class="draw-stroke" cx="77" cy="-15" r="2.2" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Portada lateral izquierda con óculo superior -->
+      <path class="draw-stroke" d="M 52 -3.5 L 52 -9.5 A 3.5 3.5 0 0 1 59 -9.5 L 59 -3.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <ellipse class="draw-stroke" cx="55.5" cy="-14.5" rx="1.6" ry="2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Portada lateral derecha con óculo superior -->
+      <path class="draw-stroke" d="M 95 -3.5 L 95 -9.5 A 3.5 3.5 0 0 1 102 -9.5 L 102 -3.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <ellipse class="draw-stroke" cx="98.5" cy="-14.5" rx="1.6" ry="2" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Columnas corintias pareadas de la fachada -->
+      <line class="draw-stroke" x1="49" y1="-3.5" x2="49" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="64" y1="-3.5" x2="64" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="68" y1="-3.5" x2="68" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="86" y1="-3.5" x2="86" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="90" y1="-3.5" x2="90" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="105" y1="-3.5" x2="105" y2="-18" stroke="#1C1C1C" stroke-width="1"/>
+
+      <!-- Base de la Torre Izquierda (Torre Norte) -->
+      <rect class="draw-stroke" x="24" y="-18" width="24" height="14.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <rect class="draw-stroke" x="32.5" y="-12" width="7" height="6.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Base de la Torre Derecha (Torre Sur - 'La Manquita') -->
+      <rect class="draw-stroke" x="106" y="-18" width="24" height="14.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <rect class="draw-stroke" x="114.5" y="-12" width="7" height="6.5" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Cornisa intermedia -->
+      <line class="draw-stroke" x1="22" y1="-18" x2="132" y2="-18" stroke="#1C1C1C" stroke-width="1.1"/>
+    </g>
+
+    <!-- Nivel 3: Segundo piso de la fachada, Segundo cuerpo de las torres y los 4 pilares truncados de 'La Manquita' -->
+    <g class="tier-3">
+      <!-- Segundo piso de la fachada central con arcadas y balaustrada superior -->
+      <rect class="draw-stroke" x="48" y="-30" width="58" height="12" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <!-- Arcadas centrales triples -->
+      <rect class="draw-stroke" x="71.5" y="-27" width="3" height="7" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="75.5" y="-27.5" width="3" height="7.5" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="79.5" y="-27" width="3" height="7" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <!-- Vanos laterales del segundo piso -->
+      <rect class="draw-stroke" x="53" y="-26" width="5" height="6" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <rect class="draw-stroke" x="96" y="-26" width="5" height="6" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.6"/>
+      <!-- Coronación y almenas de la fachada central -->
+      <rect class="draw-stroke" x="65" y="-33.5" width="24" height="3.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="69" y1="-33.5" x2="69" y2="-30" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="73" y1="-33.5" x2="73" y2="-30" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="77" y1="-33.5" x2="77" y2="-30" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="81" y1="-33.5" x2="81" y2="-30" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="85" y1="-33.5" x2="85" y2="-30" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Segundo cuerpo de la Torre Derecha ('La Manquita') -->
+      <rect class="draw-stroke" x="106" y="-30" width="24" height="12" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <path class="draw-stroke" d="M 114.5 -21 L 114.5 -27 A 3.5 3.5 0 0 1 121.5 -27 L 121.5 -21 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <!-- Cornisa de coronación inconclusa de La Manquita -->
+      <rect class="draw-stroke" x="105" y="-31.5" width="26" height="1.5" fill="#1C1C1C"/>
+
+      <!-- ¡LOS 4 PILARES TRUNCADOS INACABADOS DE LA MANQUITA (Torre Sur incompleta)! -->
+      <rect class="draw-stroke" x="107.5" y="-38" width="2" height="6.5" fill="#1C1C1C"/>
+      <rect class="draw-stroke" x="113.5" y="-38" width="2" height="6.5" fill="#1C1C1C"/>
+      <rect class="draw-stroke" x="119.5" y="-38" width="2" height="6.5" fill="#1C1C1C"/>
+      <rect class="draw-stroke" x="125.5" y="-38" width="2" height="6.5" fill="#1C1C1C"/>
+
+      <!-- Segundo cuerpo de la Torre Izquierda (Torre Norte completa) -->
+      <rect class="draw-stroke" x="24" y="-30" width="24" height="12" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <path class="draw-stroke" d="M 32.5 -21 L 32.5 -27 A 3.5 3.5 0 0 1 39.5 -27 L 39.5 -21 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="22" y1="-30" x2="48" y2="-30" stroke="#1C1C1C" stroke-width="1"/>
+    </g>
+
+    <!-- Nivel 4: Cuerpos Altos de la Torre Norte (Reloj, Cuerpo de Campanas, Cúpula y Cruz) -->
+    <g class="tier-4">
+      <!-- Tercer cuerpo: Nivel del Reloj y Balconcillos -->
+      <rect class="draw-stroke" x="25.5" y="-39.5" width="21" height="9.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <!-- Reloj emblemático de la Catedral de Málaga -->
+      <circle class="draw-stroke" cx="36" cy="-35" r="2.2" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="36" y1="-35" x2="36" y2="-33.6" stroke="#E51C55" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="36" y1="-35" x2="37.2" y2="-35" stroke="#E51C55" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="24.5" y1="-39.5" x2="47.5" y2="-39.5" stroke="#1C1C1C" stroke-width="0.9"/>
+
+      <!-- Cuarto cuerpo: Campanario octogonal con columnas corintias y campana verde -->
+      <rect class="draw-stroke" x="27" y="-47.5" width="18" height="8" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <path class="draw-stroke" d="M 33 -40 L 33 -45.5 A 3 3 0 0 1 39 -45.5 L 39 -40 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <circle class="draw-stroke" cx="36" cy="-43.5" r="1.3" fill="#007A33"/>
+      <line class="draw-stroke" x1="26" y1="-47.5" x2="46" y2="-47.5" stroke="#1C1C1C" stroke-width="0.9"/>
+
+      <!-- Quinto cuerpo: Cúpula semiesférica de piedra, Linterna y Cruz de la Torre Norte -->
+      <path class="draw-stroke" d="M 27 -47.5 C 27 -54.5 45 -54.5 45 -47.5 Z" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <rect class="draw-stroke" x="34" y="-56" width="4" height="2" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.7"/>
+      <line class="draw-stroke" x1="36" y1="-56" x2="36" y2="-59" stroke="#1C1C1C" stroke-width="1.1"/>
+      <line class="draw-stroke" x1="34" y1="-57.8" x2="38" y2="-57.8" stroke="#1C1C1C" stroke-width="1.1"/>
+    </g>
+  </g>
+
+                    <g id="sceneAlmeria" class="province-scene">
+    <!-- Nivel 1: Podio y base de la fortaleza de la Alcazaba -->
+    <g class="tier-1">
+      <rect class="draw-stroke" x="18" y="-3.5" width="118" height="3.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1"/>
+      <line class="draw-stroke" x1="18" y1="-1.8" x2="136" y2="-1.8" stroke="#1C1C1C" stroke-width="0.7"/>
+    </g>
+
+    <!-- Nivel 2: La Gran Muralla de Jayrán escalonada y la Puerta de la Justicia (Arco de Herradura) -->
+    <g class="tier-2">
+      <!-- Muralla inferior escalonada que desciende por el Barranco de la Hoya -->
+      <!-- Tramo bajo izquierdo con almenas taifas -->
+      <rect class="draw-stroke" x="24" y="-12" width="28" height="9.5" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <!-- Almenas rectangulares de la muralla taifa -->
+      <path class="draw-stroke" d="M 24 -12 L 26 -12 L 26 -15 L 29 -15 L 29 -12 L 32 -12 L 32 -15 L 35 -15 L 35 -12 L 38 -12 L 38 -15 L 41 -15 L 41 -12 L 44 -12 L 44 -15 L 47 -15 L 47 -12 L 50 -12 L 50 -15 L 52 -15 L 52 -12" stroke="#1C1C1C" stroke-width="0.8" fill="#EDECEE"/>
+
+      <!-- Puerta monumental de la Alcazaba con gran arco de herradura califal -->
+      <path class="draw-stroke" d="M 34 -2.5 L 34 -9.5 C 34 -11.5 35.5 -12 37.5 -12 C 39.5 -12 41 -11.5 41 -9.5 L 41 -2.5 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.8"/>
+      <path class="draw-stroke" d="M 36 -2.5 L 36 -8.5 C 36 -9.8 36.8 -10.2 37.5 -10.2 C 38.2 -10.2 39 -9.8 39 -8.5 L 39 -2.5 Z" fill="#1C1C1C"/>
+
+      <!-- Torreón intermedio de flanqueo (Torre de la Muralla de Jayrán) -->
+      <rect class="draw-stroke" x="52" y="-20" width="16" height="17" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <!-- Saeteras defensivas -->
+      <line class="draw-stroke" x1="56" y1="-12" x2="56" y2="-16" stroke="#1C1C1C" stroke-width="0.8"/>
+      <line class="draw-stroke" x1="64" y1="-12" x2="64" y2="-16" stroke="#1C1C1C" stroke-width="0.8"/>
+      <!-- Almenas del torreón intermedio -->
+      <path class="draw-stroke" d="M 51 -20 L 54 -20 L 54 -23 L 57 -23 L 57 -20 L 61 -20 L 61 -23 L 64 -23 L 64 -20 L 67 -20 L 67 -23 L 69 -23 L 69 -20" stroke="#1C1C1C" stroke-width="0.8" fill="#EDECEE"/>
+
+      <!-- Muralla este conectada hacia el cerro de San Cristóbal -->
+      <rect class="draw-stroke" x="104" y="-14" width="28" height="12" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <path class="draw-stroke" d="M 104 -14 L 107 -14 L 107 -17 L 110 -17 L 110 -14 L 114 -14 L 114 -17 L 117 -17 L 117 -14 L 121 -14 L 121 -17 L 124 -17 L 124 -14 L 128 -14 L 128 -17 L 131 -17 L 131 -14 L 132 -14" stroke="#1C1C1C" stroke-width="0.8" fill="#EDECEE"/>
+      <line class="draw-stroke" x1="118" y1="-7" x2="118" y2="-11" stroke="#1C1C1C" stroke-width="0.8"/>
+    </g>
+
+    <!-- Nivel 3: Segundo Recinto y Torre de la Vela con su campanil -->
+    <g class="tier-3">
+      <!-- Lienzo principal del castillo y palacio taifa -->
+      <rect class="draw-stroke" x="66" y="-28" width="40" height="25" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+      <!-- Hiladas de sillería dorada de la Alcazaba -->
+      <line class="draw-stroke" x1="66" y1="-18" x2="106" y2="-18" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Torre de la Vela (Torre con el campanario que regía los riegos de la vega de Almería) -->
+      <rect class="draw-stroke" x="96" y="-36" width="12" height="22" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+      <path class="draw-stroke" d="M 99 -28 L 99 -33 A 1.5 1.5 0 0 1 102 -33 L 102 -28 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <!-- Campana de la Torre de la Vela -->
+      <circle class="draw-stroke" cx="100.5" cy="-30.5" r="0.8" fill="#007A33"/>
+      <!-- Almenas de la Torre de la Vela -->
+      <path class="draw-stroke" d="M 95 -36 L 98 -36 L 98 -39 L 101 -39 L 101 -36 L 104 -36 L 104 -39 L 107 -39 L 107 -36 L 109 -36" stroke="#1C1C1C" stroke-width="0.8" fill="#EDECEE"/>
+
+      <!-- Ventanales de arquillos geminados del palacio de Al-Mutasim -->
+      <path class="draw-stroke" d="M 72 -20 L 72 -24 A 1.2 1.2 0 0 1 75 -24 L 75 -20 M 76.5 -20 L 76.5 -24 A 1.2 1.2 0 0 1 79.5 -24 L 79.5 -20" stroke="#1C1C1C" stroke-width="0.7" fill="#EDECEE"/>
+    </g>
+
+    <!-- Nivel 4: La Imponente Torre del Homenaje de los Reyes Católicos -->
+    <g class="tier-4">
+      <!-- LA IMPONENTE TORRE DEL HOMENAJE (Tercer recinto cristiano, s. XV) -->
+      <!-- Cuerpo macizo de sillería de la gran torre rectangular (x=67 a 93, h=19) -->
+      <rect class="draw-stroke" x="67" y="-47" width="26" height="20" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.2"/>
+
+      <!-- Portada gótica de la torre con el escudo de los Reyes Católicos -->
+      <rect class="draw-stroke" x="77" y="-35" width="6" height="7" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+      <polygon class="draw-stroke" points="76,-35 80,-38 84,-35" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.7"/>
+      <circle class="draw-stroke" cx="80" cy="-36" r="0.8" fill="#FFFFFF"/>
+
+      <!-- Ventana superior ojival de la Torre del Homenaje -->
+      <path class="draw-stroke" d="M 78.5 -40 L 78.5 -44 L 80 -45.5 L 81.5 -44 L 81.5 -40 Z" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Matacanes y ménsulas voladas de la cornisa superior -->
+      <line class="draw-stroke" x1="65" y1="-47" x2="95" y2="-47" stroke="#1C1C1C" stroke-width="1.3"/>
+      <line class="draw-stroke" x1="70" y1="-47" x2="70" y2="-45.5" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="75" y1="-47" x2="75" y2="-45.5" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="80" y1="-47" x2="80" y2="-45.5" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="85" y1="-47" x2="85" y2="-45.5" stroke="#1C1C1C" stroke-width="0.9"/>
+      <line class="draw-stroke" x1="90" y1="-47" x2="90" y2="-45.5" stroke="#1C1C1C" stroke-width="0.9"/>
+
+      <!-- Garitón / torrecilla angular defensiva izquierda -->
+      <rect class="draw-stroke" x="65.5" y="-51" width="3" height="4" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <polygon class="draw-stroke" points="65.5,-51 67,-53 68.5,-51" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Garitón / torrecilla angular defensiva derecha -->
+      <rect class="draw-stroke" x="91.5" y="-51" width="3" height="4" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="0.8"/>
+      <polygon class="draw-stroke" points="91.5,-51 93,-53 94.5,-51" fill="#EDECEE" stroke="#1C1C1C" stroke-width="0.7"/>
+
+      <!-- Almenas monumentales de sillería de la Torre del Homenaje -->
+      <path class="draw-stroke" d="M 68.5 -47 L 68.5 -50.5 L 72 -50.5 L 72 -47 L 75.5 -47 L 75.5 -50.5 L 79 -50.5 L 79 -47 L 82.5 -47 L 82.5 -50.5 L 86 -50.5 L 86 -47 L 89.5 -47 L 89.5 -50.5 L 91.5 -50.5 L 91.5 -47" stroke="#1C1C1C" stroke-width="0.9" fill="#EDECEE"/>
+
+      <!-- Mástil y estandarte ondeando en la cima de la Alcazaba -->
+      <line class="draw-stroke" x1="80" y1="-50.5" x2="80" y2="-57" stroke="#1C1C1C" stroke-width="1" stroke-linecap="round"/>
+      <path class="draw-stroke" d="M 80 -57 L 85 -55 L 80 -53 Z" fill="#E51C55" stroke="#1C1C1C" stroke-width="0.5"/>
+    </g>
+  </g>
+  </g>
+
+      <!-- ========================================== -->
+      <!-- IDENTIDAD OFICIAL SUMAR ANDALUCÍA -->
+      <!-- ========================================== -->
+
+      <!-- BARRA REGLAMENTARIA NEGRA (x=0, y=0, w=154, h=6.70) -->
+      <rect x="0" y="0" width="154" height="6.70" fill="#1C1C1C" />
+
+      <!-- WORDMARK VECTORIAL OFICIAL DE SUMAR (#E51C55) CON SEPARACIÓN ÓPTICA -->
+      <g transform="translate(0, 5)" fill="#E51C55">
+        <!-- S -->
+        <path d="M0,36.7134599 L7.90322581,36.7134599 C8.23167155,40.6104194 10.8079179,43.0716569 14.872434,43.0716569 C18.5469208,43.0716569 21.0205279,41.5333834 21.0205279,38.6311742 C21.0205279,31.1243997 1.1085044,36.8775424 1.1085044,21.8024625 C1.1085044,15.4442655 6.59970674,10.952507 14.3900293,10.952507 C22.6730205,10.952507 28.2668622,15.7211548 28.4926686,23.012571 L20.6304985,23.012571 C20.3533724,19.997555 18.0542522,18.028565 14.3797654,18.028565 C11.1466276,18.028565 9.1143695,19.5668384 9.1143695,21.8127177 C9.1143695,29.8117397 29.3035191,23.3509911 29.3035191,38.5286226 C29.3035191,45.7072321 23.483871,50.2092457 14.872434,50.2092457 C6.14809384,50.1989906 0.328445748,44.8765644 0,36.7134599 Z"/>
+        <!-- U -->
+        <path d="M58.5043988,49.7580189 L50.8269795,49.7580189 L50.8269795,45.9225904 C49.28739,48.6094413 46.2184751,50.1989906 42.431085,50.1989906 C36.1803519,50.1989906 32.1158358,45.7072321 32.1158358,39.3490351 L32.1158358,22.1306275 L39.7932551,22.1306275 L39.7932551,37.6466792 C39.7932551,40.9898601 41.9281525,43.3998219 45.1099707,43.3998219 C48.4560117,43.3998219 50.8167155,40.8257776 50.8167155,37.2569832 L50.8167155,22.1306275 L58.5043988,22.1306275 L58.5043988,49.7580189 Z"/>
+        <!-- M -->
+        <path d="M62.3533724,22.1306275 L70.0307918,22.1306275 L70.0307918,26.0275869 C71.5087977,23.5048185 74.1466276,21.6999109 77.872434,21.6999109 C82.2038123,21.6999109 85.0058651,23.4535427 86.3196481,26.7454479 C87.6334311,24.0585969 91.0923754,21.6999109 95.5366569,21.6999109 C101.571848,21.6999109 105.472141,26.1403937 105.472141,31.6781781 L105.472141,49.768274 L97.8460411,49.768274 L97.8460411,34.0778847 C97.8460411,30.5090903 95.9266862,28.1606595 92.9604106,28.1606595 C89.7785924,28.1606595 87.7463343,30.5193455 87.7463343,34.0778847 L87.7463343,49.7580189 L80.068915,49.7580189 L80.068915,34.0778847 C80.068915,30.5090903 78.2008798,28.1606595 75.244868,28.1606595 C72.0630499,28.1606595 70.0307918,30.5193455 70.0307918,34.0778847 L70.0307918,49.7580189 L62.3431085,49.7580189 L62.3533724,22.1306275 L62.3533724,22.1306275 Z"/>
+        <!-- A -->
+        <path d="M132.671554,31.996088 L132.671554,49.7580189 L125.096774,49.7580189 L125.096774,45.9225904 C124.162757,48.4966346 121.093842,50.1989906 117.306452,50.1989906 C111.928152,50.1989906 108.253666,46.6301962 108.253666,41.9230794 C108.253666,36.4981016 112.318182,33.2061964 118.353372,33.2061964 L123.013196,33.2061964 C124.388563,33.2061964 125.096774,32.324253 125.096774,31.1756755 C125.096774,28.8682653 123.290323,27.278716 120.159824,27.278716 C116.813783,27.278716 115.109971,29.3605128 115.007331,31.667923 L108.202346,31.667923 C108.530792,26.1301385 113.026393,21.6896558 120.601173,21.6896558 C127.570381,21.6896558 132.671554,25.7506977 132.671554,31.996088 Z M125.096774,38.4158159 L125.096774,38.0363751 L119.502933,38.0363751 C117.203812,38.0363751 115.55132,39.4618418 115.55132,41.5949144 C115.55132,43.3998219 117.090909,44.6612061 119.225806,44.6612061 C122.961877,44.6612061 125.096774,41.9230794 125.096774,38.4158159 Z"/>
+        <!-- R -->
+        <path d="M149.442815,28.4888245 C145.655425,28.4888245 143.961877,31.6166472 143.961877,36.323764 L143.961877,49.7580189 L136.274194,49.7580189 L136.274194,22.1306275 L143.951613,22.1306275 L143.951613,26.7351927 C145.429619,23.279205 147.513196,22.1306275 150.859238,22.1306275 L153.989736,22.1306275 L153.989736,28.4888245 L149.442815,28.4888245 L149.442815,28.4888245 Z"/>
+      </g>
+
+      <!-- TEXTO: ANDALUCÍA (en mayúsculas, separado con elegancia a y=74 y grosor refinado font-weight: 500) -->
+      <text x="77" y="74" 
+            text-anchor="middle" 
+            font-family="'Montserrat', sans-serif" 
+            font-weight="500" 
+            font-size="10.8" 
+            letter-spacing="0.22em" 
+            fill="#007A33">ANDALUCÍA</text>
+    </svg>
+
+    <!-- Indicador de provincia con transición minimalista y elegante -->
+    <div class="province-indicator">
+      <div class="province-name-wrapper">
+        <span class="province-name" id="provinceLabel">CÓRDOBA</span>
+      </div>
+      <div class="province-dots" id="dotsContainer">
+        <span class="prov-dot active" onclick="jumpToProvince(0)" title="Córdoba"></span>
+        <span class="prov-dot" onclick="jumpToProvince(1)" title="Sevilla"></span>
+        <span class="prov-dot" onclick="jumpToProvince(2)" title="Granada"></span>
+        <span class="prov-dot" onclick="jumpToProvince(3)" title="Huelva"></span>
+        <span class="prov-dot" onclick="jumpToProvince(4)" title="Cádiz"></span>
+        <span class="prov-dot" onclick="jumpToProvince(5)" title="Jaén"></span>
+        <span class="prov-dot" onclick="jumpToProvince(6)" title="Málaga"></span>
+        <span class="prov-dot" onclick="jumpToProvince(7)" title="Almería"></span>
+      </div>
+    </div>
+
+    <!-- Badge Próximamente -->
+    <div class="badge-soon">Próximamente</div>
+  </div>
+
+  <script>
+    const provinceIds = [
+      'sceneCordoba', 'sceneSevilla', 'sceneGranada', 'sceneHuelva',
+      'sceneCadiz', 'sceneJaen', 'sceneMalaga', 'sceneAlmeria'
+    ];
+
+    const provinceNames = [
+      'CÓRDOBA', 'SEVILLA', 'GRANADA', 'HUELVA',
+      'CÁDIZ', 'JAÉN', 'MÁLAGA', 'ALMERÍA'
+    ];
+
+    let currentIndex = 0;
+    let mainLoopTimeout = null;
+    let activeTimeline = null;
+
+    function getElementLength(el) {
+      if (el.getTotalLength) {
+        try {
+          const l = el.getTotalLength();
+          if (l > 0) return l;
+        } catch(e) {}
+      }
+      const tag = el.tagName.toLowerCase();
+      if (tag === 'line') {
+        const x1 = parseFloat(el.getAttribute('x1') || 0);
+        const y1 = parseFloat(el.getAttribute('y1') || 0);
+        const x2 = parseFloat(el.getAttribute('x2') || 0);
+        const y2 = parseFloat(el.getAttribute('y2') || 0);
+        return Math.hypot(x2 - x1, y2 - y1) || 50;
+      }
+      if (tag === 'circle') {
+        const r = parseFloat(el.getAttribute('r') || 1);
+        return 2 * Math.PI * r;
+      }
+      if (tag === 'rect') {
+        const w = parseFloat(el.getAttribute('width') || 0);
+        const h = parseFloat(el.getAttribute('height') || 0);
+        return 2 * (w + h) || 50;
+      }
+      return 60;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      provinceIds.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.display = (i === 0) ? 'block' : 'none';
+        }
+      });
+
+      runProvinceCycle(0);
+    });
+
+    function jumpToProvince(idx) {
+      if (idx === currentIndex) return;
+      if (mainLoopTimeout) clearTimeout(mainLoopTimeout);
+      if (activeTimeline) activeTimeline.kill();
+
+      provinceIds.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) {
+          gsap.killTweensOf(el);
+          gsap.killTweensOf(el.querySelectorAll('*'));
+          if (i !== idx) {
+            el.style.display = 'none';
+            el.style.opacity = 0;
+          }
+        }
+      });
+
+      const nextEl = document.getElementById(provinceIds[idx]);
+      if (nextEl) {
+        nextEl.style.display = 'block';
+        nextEl.style.opacity = 1;
+      }
+      runProvinceCycle(idx);
+    }
+
+    function updateProvinceLabel(newIndex) {
+      const label = document.getElementById('provinceLabel');
+      if (!label) return;
+
+      gsap.to(label, {
+        y: -12,
+        opacity: 0,
+        duration: 0.20,
+        ease: "power2.in",
+        onComplete: () => {
+          label.textContent = provinceNames[newIndex];
+          gsap.fromTo(label,
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" }
+          );
+        }
+      });
+    }
+
+    function runProvinceCycle(targetIdx) {
+      currentIndex = targetIdx;
+      const currentEl = document.getElementById(provinceIds[currentIndex]);
+      const dots = document.querySelectorAll('.prov-dot');
+
+      updateProvinceLabel(currentIndex);
+
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentIndex);
+      });
+
+      buildProvince(currentEl, () => {
+        mainLoopTimeout = setTimeout(() => {
+          deconstructProvince(currentEl, () => {
+            currentEl.style.display = 'none';
+
+            const nextIdx = (currentIndex + 1) % provinceIds.length;
+            const nextEl = document.getElementById(provinceIds[nextIdx]);
+            if (nextEl) {
+              nextEl.style.display = 'block';
+            }
+            runProvinceCycle(nextIdx);
+          });
+        }, 550);
+      });
+    }
+
+    function buildProvince(sceneEl, onComplete) {
+      if (!sceneEl || typeof gsap === 'undefined') {
+        if (onComplete) onComplete();
+        return;
+      }
+
+      // Reset y aislamiento de todas las demás escenas
+      provinceIds.forEach(id => {
+        if (id !== sceneEl.id) {
+          const other = document.getElementById(id);
+          if (other) {
+            gsap.killTweensOf(other);
+            gsap.killTweensOf(other.querySelectorAll('*'));
+            gsap.set(other.querySelectorAll('.draw-stroke'), { clearProps: "transform,opacity" });
+            other.style.display = 'none';
+            other.style.opacity = 0;
+          }
+        }
+      });
+
+      // Limpiar propiedades residuales de ciclos anteriores en la escena activa
+      gsap.killTweensOf(sceneEl);
+      gsap.killTweensOf(sceneEl.querySelectorAll('*'));
+      gsap.set(sceneEl.querySelectorAll('.draw-stroke'), { clearProps: "transform" });
+      gsap.set(sceneEl, { opacity: 1, display: 'block' });
+
+      const strokeElements = sceneEl.querySelectorAll('.draw-stroke');
+      strokeElements.forEach(el => {
+        const len = getElementLength(el);
+        el.style.strokeDasharray = len + ' ' + (len + 2);
+        el.style.strokeDashoffset = len;
+      });
+
+      const tl = gsap.timeline({
+        onComplete: onComplete
+      });
+      activeTimeline = tl;
+
+      if (sceneEl.id === 'sceneCordoba') {
+        const cols = sceneEl.querySelectorAll('.tier-1 .draw-stroke');
+        const bay0 = sceneEl.querySelectorAll('.tier-2 .bay-0');
+        const bay1 = sceneEl.querySelectorAll('.tier-2 .bay-1');
+        const bay2 = sceneEl.querySelectorAll('.tier-2 .bay-2');
+
+        tl.fromTo(cols,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 12 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.32, stagger: 0.015, ease: "power2.out" }
+        );
+
+        tl.fromTo(bay0,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 16 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.30, stagger: 0.012, ease: "power2.out" },
+          "-=0.2"
+        );
+        tl.fromTo(bay1,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 16 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.30, stagger: 0.012, ease: "power2.out" },
+          "-=0.22"
+        );
+        tl.fromTo(bay2,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 16 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.30, stagger: 0.012, ease: "power2.out" },
+          "-=0.22"
+        );
+        return;
+      }
+
+      if (sceneEl.id === 'sceneSevilla') {
+        const giralda = sceneEl.querySelectorAll('.tier-2 .draw-stroke, .tier-3 .draw-stroke, .tier-4 .draw-stroke');
+        const muralla = sceneEl.querySelectorAll('.tier-1 .draw-stroke');
+        const catedral = sceneEl.querySelectorAll('#catedralFondo .draw-stroke');
+
+        // 1. La Torre de la Giralda COMPLETA
+        tl.fromTo(giralda,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 15 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.36, stagger: 0.004, ease: "power2.out" }
+        );
+
+        // 2. Muralla y naranjos
+        tl.fromTo(muralla,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 10 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.26, stagger: 0.004, ease: "power2.out" },
+          "-=0.22"
+        );
+
+        // 3. El fondo de la catedral se carga DESPUÉS de la torre
+        tl.fromTo(catedral,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 12 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.32, stagger: 0.005, ease: "power2.out" },
+          "+=0.04"
+        );
+        return;
+      }
+
+      if (sceneEl.id === 'sceneHuelva') {
+        const flock = sceneEl.querySelector('#flockFlight');
+        if (flock) {
+          gsap.killTweensOf(flock);
+          const birds = flock.querySelectorAll('.flock-bird');
+          birds.forEach(b => {
+            const bx = b.getAttribute('data-x') || 0;
+            const by = b.getAttribute('data-y') || 0;
+            const bs = b.getAttribute('data-s') || 0.5;
+            b.setAttribute('transform', `translate(${bx}, ${by}) scale(${bs})`);
+          });
+          // Vuelo a la altura del campanario (y=-33) cruzando todo el largo de la barra de sumar con ondulación natural
+          gsap.set(flock, { x: -28, y: -33, opacity: 0 });
+          const flightTl = gsap.timeline();
+          flightTl.to(flock, { opacity: 1, duration: 0.35, ease: "power1.out" }, 0.05)
+                  .to(flock, { x: 190, duration: 2.1, ease: "none" }, 0)
+                  .to(flock, {
+                    y: "-=3",
+                    duration: 0.5,
+                    yoyo: true,
+                    repeat: 6,
+                    ease: "sine.inOut"
+                  }, 0)
+                  .to(flock, { opacity: 0, duration: 0.35, ease: "power1.in" }, 2.85);
+        }
+      }
+
+      if (sceneEl.id === 'sceneGranada') {
+        const chorroGroup = sceneEl.querySelector('#granadaChorro');
+        if (chorroGroup) {
+          gsap.killTweensOf(chorroGroup.children);
+          gsap.set(chorroGroup, { display: 'none', opacity: 0 });
+        }
+      }
+
+      const t1 = sceneEl.querySelectorAll('.tier-1 .draw-stroke');
+      const t2 = sceneEl.querySelectorAll('.tier-2 .draw-stroke');
+      const t3 = sceneEl.querySelectorAll('.tier-3 .draw-stroke');
+      const t4 = sceneEl.querySelectorAll('.tier-4 .draw-stroke');
+
+      if (t1.length > 0) {
+        tl.fromTo(t1,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 10 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.20, stagger: 0.004, ease: "power2.out" }
+        );
+      }
+
+      if (t2.length > 0) {
+        tl.fromTo(t2,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 15 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.20, stagger: 0.004, ease: "power2.out" },
+          "-=0.2"
+        );
+      }
+
+      if (t3.length > 0) {
+        tl.fromTo(t3,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 18 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.30, stagger: 0.004, ease: "power2.out" },
+          "-=0.2"
+        );
+      }
+
+      if (t4.length > 0) {
+        tl.fromTo(t4,
+          { strokeDashoffset: (i, el) => getElementLength(el), opacity: 0, y: 20 },
+          { strokeDashoffset: 0, opacity: 1, y: 0, duration: 0.30, stagger: 0.004, ease: "back.out(1.15)" },
+          "-=0.18"
+        );
+      }
+
+      // En Granada: PRIMERO se carga toda la arquitectura y leones, y LUEGO brotan los chorros de la boca de los leones hacia el suelo
+      if (sceneEl.id === 'sceneGranada') {
+        const chorroGroup = sceneEl.querySelector('#granadaChorro');
+        if (chorroGroup) {
+          const streams = chorroGroup.querySelectorAll('.water-stream');
+          const ripples = chorroGroup.querySelectorAll('.water-ripple');
+          const drops = chorroGroup.querySelectorAll('.water-drop');
+
+          streams.forEach(el => {
+            const len = el.getTotalLength ? el.getTotalLength() : 20;
+            el.style.strokeDasharray = len + ' ' + (len + 2);
+            el.style.strokeDashoffset = len;
+          });
+          gsap.set(ripples, { opacity: 0, scaleX: 0, transformOrigin: "center" });
+          gsap.set(drops, { opacity: 0, scale: 0, transformOrigin: "center" });
+
+          // Revelar contenedor solo al llegar a este punto de la animación (tras consolidar arquitectura)
+          tl.set(chorroGroup, { display: 'block', opacity: 1 }, "+=0.08");
+
+          // Chorros brotando de las 3 bocas de los leones hacia el suelo
+          tl.to(streams, {
+            strokeDashoffset: 0,
+            duration: 0.42,
+            stagger: 0.06,
+            ease: "power2.out"
+          });
+
+          // Ondas y salpicaduras en el suelo
+          tl.to(ripples, {
+            opacity: 1,
+            scaleX: 1,
+            duration: 0.25,
+            stagger: 0.04,
+            ease: "power2.out"
+          }, "-=0.22");
+
+          tl.to(drops, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.22,
+            stagger: 0.04,
+            ease: "back.out(1.8)"
+          }, "-=0.22");
+        }
+      }
+    }
+
+    function deconstructProvince(sceneEl, onComplete) {
+      if (!sceneEl || typeof gsap === 'undefined') {
+        if (onComplete) onComplete();
+        return;
+      }
+
+      gsap.killTweensOf(sceneEl);
+      gsap.killTweensOf(sceneEl.querySelectorAll('*'));
+
+      if (sceneEl.id === 'sceneGranada') {
+        const chorroGroup = sceneEl.querySelector('#granadaChorro');
+        if (chorroGroup) {
+          gsap.set(chorroGroup, { display: 'none', opacity: 0 });
+        }
+      }
+      if (sceneEl.id === 'sceneHuelva') {
+        const flock = sceneEl.querySelector('#flockFlight');
+        if (flock) {
+          gsap.set(flock, { opacity: 0, x: -28, y: -33 });
+        }
+      }
+
+      const elements = sceneEl.querySelectorAll('.draw-stroke');
+      const tl = gsap.timeline({
+        onComplete: () => {
+          // Limpiar estilos residuales para que los segundos ciclos arranquen impecables
+          gsap.set(elements, { clearProps: "transform,opacity" });
+          sceneEl.style.display = 'none';
+          sceneEl.style.opacity = 0;
+          if (onComplete) onComplete();
+        }
+      });
+      activeTimeline = tl;
+
+      tl.to(elements, {
+        y: 10,
+        opacity: 0,
+        duration: 0.20,
+        stagger: { each: 0.005, from: "top" },
+        ease: "power2.in"
+      });
+    }
+  </script>
+</body>
+</html>
